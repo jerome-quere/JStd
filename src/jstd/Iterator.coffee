@@ -1,23 +1,23 @@
 ##
 # Copyright 2012 Jerome Quere < contact@jeromequere.com >.
 #
-# This file is part of JStl.
+# This file is part of Jstd.
 #
-# JStl is free software: you can redistribute it and/or modify
+# Jstd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# JStl is distributed in the hope that it will be useful,
+# Jstd is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with JStl.If not, see <http://www.gnu.org/licenses/>.
+# along with Jstd.If not, see <http://www.gnu.org/licenses/>.
 ##
 
-class jstl.iterator
+class jstd.iterator
 
         @TYPE_INPUT = 1
         @TYPE_OUTPUT = 2
@@ -29,15 +29,15 @@ class jstl.iterator
         getType: () -> @type
 
 
-jstl.advance = (i, n) ->
-        if (i.getType() == jstl.iterator.TYPE_RANDOM)
+jstd.advance = (i, n) ->
+        if (i.getType() == jstd.iterator.TYPE_RANDOM)
                 i.copy(i.add(n))
                 return
         for i in [0..n]
                 i.next()
 
-jstl.distance = (first, second) ->
-        if (first.getType() == jstl.iterator.TYPE_RANDOM)
+jstd.distance = (first, second) ->
+        if (first.getType() == jstd.iterator.TYPE_RANDOM)
                 return (Math.abs(second.value() - first.value()))
         first = first.clone()
         i = 0
@@ -46,7 +46,7 @@ jstl.distance = (first, second) ->
                 ++i
         return i
 
-class jstl.reverse_iterator extends jstl.iterator
+class jstd.reverse_iterator extends jstd.iterator
         constructor: (baseIt) ->
                 super baseIt.getType()
                 @baseIt = baseIt.clone()
@@ -77,19 +77,19 @@ class jstl.reverse_iterator extends jstl.iterator
         add:  (n)  -> new reverse_iterator(@baseIt.sub(n));
         sub:  (n)  -> new reverse_iterator(@baseIt.add(n));
 
-jstl.inserter =  (container, it) ->
-        new jstl.insert_iterator(container, it)
+jstd.inserter =  (container, it) ->
+        new jstd.insert_iterator(container, it)
 
-jstl.back_inserter =  (container) ->
-        new jstl.back_insert_iterator(container)
+jstd.back_inserter =  (container) ->
+        new jstd.back_insert_iterator(container)
 
-jstl.front_inserter =  (container) ->
-        new jstl.front_insert_iterator(container)
+jstd.front_inserter =  (container) ->
+        new jstd.front_insert_iterator(container)
 
 
-class jstl.insert_iterator  extends jstl.iterator
+class jstd.insert_iterator  extends jstd.iterator
         constructor: (@container, @it) ->
-                super jstl.iterator.TYPE_OUTPUT
+                super jstd.iterator.TYPE_OUTPUT
 
         clone: () -> new insert_iterator(@container);
         copy: (obj) -> @swap(obj.clone())
@@ -98,9 +98,9 @@ class jstl.insert_iterator  extends jstl.iterator
                 @it = @container.insert(@it, value)
         next: () ->
 
-class jstl.back_insert_iterator extends jstl.iterator
+class jstd.back_insert_iterator extends jstd.iterator
         constructor: (@container) ->
-                super jstl.iterator.TYPE_OUTPUT
+                super jstd.iterator.TYPE_OUTPUT
 
         clone: () -> new back_insert_iterator(@container);
         copy: (obj) -> @swap(obj.clone())
@@ -108,9 +108,9 @@ class jstl.back_insert_iterator extends jstl.iterator
         set: (value) -> @container.push_back(value)
         next: () ->
 
-class jstl.front_insert_iterator extends jstl.iterator
+class jstd.front_insert_iterator extends jstd.iterator
         constructor: (@container) ->
-                super jstl.iterator.TYPE_OUTPUT
+                super jstd.iterator.TYPE_OUTPUT
 
         clone: () -> new front_insert_iterator(@container);
         copy: (obj) -> @swap(obj.clone())
