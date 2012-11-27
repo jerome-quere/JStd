@@ -1,7 +1,24 @@
-assert = require("assert")
-should = require('should')
-jstl = require('../../dist/jstl.js')
+##
+# Copyright 2012 Jerome Quere < contact@jeromequere.com >.
+#
+# This file is part of JStl.
+#
+# JStl is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# JStl is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with JStl.If not, see <http://www.gnu.org/licenses/>.
+##
 
+assert = require("assert")
+jstl = require('../../dist/jstl.js')
 
 describe 'vector', () ->
         describe '#at()', () ->
@@ -11,9 +28,9 @@ describe 'vector', () ->
                                 v.push_back(i)
                         for i in [0..10]
                                 assert.equal(v.at(i), i)
-                        (()-> v.at(-1)).should.throw('out_of_range')
-                        (()-> v.at(9)).should.not.throw()
-                        (()-> v.at(10)).should.not.throw('out_of_range')
+                        assert.throws((()-> v.at(-1)), "out_of_range")
+                        assert.doesNotThrow(()-> v.at(9))
+                        assert.throws((()-> v.at(11)), "out_of_range")
 
         describe '#get()', () ->
                 it 'should return the value located at the correct index', () ->
@@ -28,30 +45,30 @@ describe 'vector', () ->
                         v = new jstl.vector()
                         for i in [0..10]
                                 v.push_back(i)
-                                v.back().should.equal(i)
+                                assert.equal(v.back(), i)
 
         describe '#front()', () ->
                 it 'should access the first element ', () ->
                         v = new jstl.vector()
                         for i in [0..10]
                                 v.push_back(i)
-                                v.front().should.equal(0)
+                                assert.equal(v.front(), 0)
 
         describe '#size()', () ->
                 it 'should returns the number of elements ', () ->
                         v = new jstl.vector()
                         for i in [0..10]
                                 v.push_back(i)
-                                v.size().should.equal(i + 1)
+                                assert.equal(v.size(), i + 1)
 
         describe '#empty()', () ->
                 it 'should checks whether the container is empty', () ->
                         v = new jstl.vector()
-                        v.empty().should.be.true
+                        assert.equal(v.empty(), true)
                         v.push_back(1)
-                        v.empty().should.be.false
+                        assert.equal(v.empty(), false)
                         v.pop_back()
-                        v.empty().should.be.true
+                        assert.equal(v.empty(), true)
 
         describe '#resize', () ->
                 it 'should changes the number of elements stored', () ->
@@ -59,9 +76,9 @@ describe 'vector', () ->
                         for i in [0..10]
                                 v.push_back(i)
                         v.resize(5)
-                        v.size().should.equal(5)
+                        assert.equal(v.size(), 5)
                         v.resize(-1)
-                        v.size().should.equal(0)
+                        assert.equal(v.size(), 0)
 
 
         describe '#clear', () ->
@@ -70,7 +87,7 @@ describe 'vector', () ->
                         for i in [0..10]
                                 v.push_back(i)
                         v.clear()
-                        v.empty().should.be.true
+                        assert.equal(v.empty(), true)
 
         describe '#iterator', () ->
                 it 'should allow to iterate throught the vector', ()->
@@ -79,7 +96,7 @@ describe 'vector', () ->
                                 v.push_back(i)
                         i = 0;
                         jstl.foreach v.begin(), v.end(), (e) ->
-                                e.should.equal(i)
+                                assert.equal(e, i)
                                 i++
 
         describe '#riterator', () ->
@@ -89,7 +106,7 @@ describe 'vector', () ->
                                 v.push_back(i)
                         i = 10;
                         jstl.foreach v.rbegin(), v.rend(), (e) ->
-                                e.should.equal(i)
+                                assert.equal(e, i)
                                 i--
 
         describe '#clone', () ->
@@ -98,9 +115,9 @@ describe 'vector', () ->
                         for i in [1..10]
                                 v.push_back(i)
                         v2 = v.clone()
-                        v2.size().should.equal(10);
+                        assert.equal(v2.size(), 10);
                         v.push_back(11)
-                        v2.size().should.equal(10);
+                        assert.equal(v2.size(), 10);
 
         describe '#swap', () ->
                 it 'should swap the vector content', () ->
@@ -111,8 +128,8 @@ describe 'vector', () ->
                         for i in [1..20]
                                 v2.push_back(i)
                         v.swap v2
-                        v.size().should.equal(20);
-                        v2.size().should.equal(10)
+                        assert.equal(v.size(), 20)
+                        assert.equal(v2.size(), 10)
 
         describe '#erase', () ->
                 it 'should erases elements ', () ->
@@ -120,14 +137,16 @@ describe 'vector', () ->
                         for i in [0..10]
                                 v.push_back(i)
                         v.erase(v.begin().add(1))
-                        v.get(1).should.equal(2)
+                        assert.equal(v.get(1), 2)
                         v.eraseRange(v.begin(), v.end().sub(1));
-                        v.get(0).should.equal(10)
+                        assert.equal(jstl.accumulate(v.begin(), v.end()), 10)
 
                         v = new jstl.vector()
                         for i in [0..10]
                                 v.push_back(i)
                         v.erase(v.rbegin().add(1))
-                        v.get(9).should.equal(10)
+                        assert.equal(jstl.accumulate(v.begin(), v.end()), 1+2+3+4+5+6+7+8+10)
+                        assert.equal(v.get(9), 10)
+                        assert.equal(v.size(), 10)
                         v.eraseRange(v.rbegin(), v.rend().sub(1));
-                        v.get(0).should.equal(0)
+                        assert.equal(jstl.accumulate(v.begin(), v.end()), 0)

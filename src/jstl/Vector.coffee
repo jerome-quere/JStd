@@ -26,12 +26,17 @@ class jstl.vector
                 v.insertRange @begin(), @end()
                 return (v)
 
+        copy: (obj) ->
+                v = obj.clone();
+                @swap(obj)
+
         at: (idx) ->
                 if (idx < 0 || idx >= @size())
                         throw new jstl.out_of_range()
                 @get(idx)
 
         get:   (idx) -> @array[idx]
+        set:   (idx, value) -> @array[idx] = value
         back:  () -> @array[@size() - 1]
         front: () -> @array[0]
         data:  () -> @array
@@ -52,30 +57,44 @@ class jstl.vector
 
         begin: () -> new @iterator(this, 0);
         end:   () -> new @iterator(this, @size());
-        rbegin: () -> new @riterator(this, @size() - 1);
-        rend:   () -> new @riterator(this, -1);
+        rbegin: () -> new jstl.reverse_iterator(@end());
+        rend:   () -> new jstl.reverse_iterator(@begin());
 
         insert: (it, value) ->
-                @array.splice(it.idx, 0, value)
+                @array.splice(it.value(), 0, value)
+                return (it.add(1));
 
         insertRange: (first, last) ->
                 jstl.foreach first, last, (e) =>
                         @push_back(e)
 
         erase: (it) ->
-                @array.splice(it.idx, 1);
+                @array.splice(it.value(), 1);
 
         eraseRange: (first, last) ->
-                if last.idx < first.idx
-                        last.prev()
-                        first.prev()
-                @array.splice(jstl.min(first.idx, last.idx), Math.abs(first.idx - last.idx))
+                if last.value() < first.value()
+                        [first, last] = [last.base(), first.base()];
+                @array.splice(first.value(), Math.abs(first.idx - last.idx))
 
-        class vector::iterator
+        class vector::iterator extends jstl.iterator
                 constructor: (@vector, @idx) ->
+                        super jstl.iterator.TYPE_RANDOM;
+
+                clone: () -> new iterator(@vector, @idx)
+
+                copy: (obj) ->
+                        i = obj.clone();
+                        @swap(i)
+
+                swap: (obj) ->
+                        [@vector, obj.vector] = [obj.vector, @vector]
+                        [@idx, obj.idx] = [obj.idx, @idx]
 
                 get:  () ->
                         @vector.get(@idx)
+                set:  (value) ->
+                        @vector.set(@idx, value);
+                value: () -> @idx;
                 next: () -> @idx++;
                 prev: () -> @idx--;
                 eq:   (it) -> @idx == it.idx
@@ -86,16 +105,6 @@ class jstl.vector
                 gte:  (it) -> @gt(it) || @eq(it)
                 add:  (v)  -> new iterator(@vector, @idx + v);
                 sub:  (v)  -> new iterator(@vector, @idx - v);;
-
-        class vector::riterator extends vector::iterator
-
-                next: () -> @idx--;
-                prev: () -> @idx++;
-                lt:   (it) ->
-                        console.log("#{@idx} > #{it.idx}")
-                        @idx > it.idx
-                add:  (v)  -> new riterator(@vector, @idx - v);
-                sub:  (v)  -> new riterator(@vector, @idx + v);
 
 
 module.exports = jstl;

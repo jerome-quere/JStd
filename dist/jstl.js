@@ -58,6 +58,253 @@
 
   })(jstl.logic_error);
 
+  jstl.iterator = (function() {
+
+    iterator.TYPE_INPUT = 1;
+
+    iterator.TYPE_OUTPUT = 2;
+
+    iterator.TYPE_FORWARD = 3;
+
+    iterator.TYPE_BIDIRECTIONAL = 4;
+
+    iterator.TYPE_RANDOM = 5;
+
+    function iterator(type) {
+      this.type = type;
+    }
+
+    iterator.prototype.getType = function() {
+      return this.type;
+    };
+
+    return iterator;
+
+  })();
+
+  jstl.advance = function(i, n) {
+    var _i, _results;
+    if (i.getType() === jstl.iterator.TYPE_RANDOM) {
+      i.copy(i.add(n));
+      return;
+    }
+    _results = [];
+    for (i = _i = 0; 0 <= n ? _i <= n : _i >= n; i = 0 <= n ? ++_i : --_i) {
+      _results.push(i.next());
+    }
+    return _results;
+  };
+
+  jstl.distance = function(first, second) {
+    var i;
+    if (first.getType() === jstl.iterator.TYPE_RANDOM) {
+      return Math.abs(second.value() - first.value());
+    }
+    first = first.clone();
+    i = 0;
+    while (first.neq(second)) {
+      first.next();
+      ++i;
+    }
+    return i;
+  };
+
+  jstl.reverse_iterator = (function(_super) {
+
+    __extends(reverse_iterator, _super);
+
+    function reverse_iterator(baseIt) {
+      reverse_iterator.__super__.constructor.call(this, baseIt.getType());
+      this.baseIt = baseIt.clone();
+    }
+
+    reverse_iterator.prototype.clone = function() {
+      return new reverse_iterator(this.baseIt);
+    };
+
+    reverse_iterator.prototype.copy = function(obj) {
+      var i;
+      i = obj.clone();
+      return this.swap(i);
+    };
+
+    reverse_iterator.prototype.swap = function(obj) {
+      var _ref;
+      return _ref = [obj.baseIt, this.baseIt], this.baseIt = _ref[0], obj.baseIt = _ref[1], _ref;
+    };
+
+    reverse_iterator.prototype.base = function() {
+      return this.baseIt;
+    };
+
+    reverse_iterator.prototype.get = function() {
+      return this.baseIt.sub(1).get();
+    };
+
+    reverse_iterator.prototype.set = function(value) {
+      return this.baseIt.sub(1).set(value);
+    };
+
+    reverse_iterator.prototype.value = function() {
+      return this.baseIt.sub(1).value();
+    };
+
+    reverse_iterator.prototype.next = function() {
+      return this.baseIt.prev();
+    };
+
+    reverse_iterator.prototype.prev = function() {
+      return this.baseIt.next();
+    };
+
+    reverse_iterator.prototype.eq = function(it) {
+      return this.baseIt.eq(it.baseIt);
+    };
+
+    reverse_iterator.prototype.lt = function(it) {
+      return this.baseIt.lt(it.baseIt);
+    };
+
+    reverse_iterator.prototype.neq = function(it) {
+      return !this.eq(it);
+    };
+
+    reverse_iterator.prototype.lte = function(it) {
+      return this.lt(it) || this.eq(it);
+    };
+
+    reverse_iterator.prototype.gt = function(it) {
+      return !this.lte(it);
+    };
+
+    reverse_iterator.prototype.gte = function(it) {
+      return this.gt(it) || this.eq(it);
+    };
+
+    reverse_iterator.prototype.add = function(n) {
+      return new reverse_iterator(this.baseIt.sub(n));
+    };
+
+    reverse_iterator.prototype.sub = function(n) {
+      return new reverse_iterator(this.baseIt.add(n));
+    };
+
+    return reverse_iterator;
+
+  })(jstl.iterator);
+
+  jstl.inserter = function(container, it) {
+    return new jstl.insert_iterator(container, it);
+  };
+
+  jstl.back_inserter = function(container) {
+    return new jstl.back_insert_iterator(container);
+  };
+
+  jstl.front_inserter = function(container) {
+    return new jstl.front_insert_iterator(container);
+  };
+
+  jstl.insert_iterator = (function(_super) {
+
+    __extends(insert_iterator, _super);
+
+    function insert_iterator(container, it) {
+      this.container = container;
+      this.it = it;
+      insert_iterator.__super__.constructor.call(this, jstl.iterator.TYPE_OUTPUT);
+    }
+
+    insert_iterator.prototype.clone = function() {
+      return new insert_iterator(this.container);
+    };
+
+    insert_iterator.prototype.copy = function(obj) {
+      return this.swap(obj.clone());
+    };
+
+    insert_iterator.prototype.get = function() {};
+
+    insert_iterator.prototype.set = function(value) {
+      return this.it = this.container.insert(this.it, value);
+    };
+
+    insert_iterator.prototype.next = function() {};
+
+    return insert_iterator;
+
+  })(jstl.iterator);
+
+  jstl.back_insert_iterator = (function(_super) {
+
+    __extends(back_insert_iterator, _super);
+
+    function back_insert_iterator(container) {
+      this.container = container;
+      back_insert_iterator.__super__.constructor.call(this, jstl.iterator.TYPE_OUTPUT);
+    }
+
+    back_insert_iterator.prototype.clone = function() {
+      return new back_insert_iterator(this.container);
+    };
+
+    back_insert_iterator.prototype.copy = function(obj) {
+      return this.swap(obj.clone());
+    };
+
+    back_insert_iterator.prototype.get = function() {};
+
+    back_insert_iterator.prototype.set = function(value) {
+      return this.container.push_back(value);
+    };
+
+    back_insert_iterator.prototype.next = function() {};
+
+    return back_insert_iterator;
+
+  })(jstl.iterator);
+
+  jstl.front_insert_iterator = (function(_super) {
+
+    __extends(front_insert_iterator, _super);
+
+    function front_insert_iterator(container) {
+      this.container = container;
+      front_insert_iterator.__super__.constructor.call(this, jstl.iterator.TYPE_OUTPUT);
+    }
+
+    front_insert_iterator.prototype.clone = function() {
+      return new front_insert_iterator(this.container);
+    };
+
+    front_insert_iterator.prototype.copy = function(obj) {
+      return this.swap(obj.clone());
+    };
+
+    front_insert_iterator.prototype.get = function() {};
+
+    front_insert_iterator.prototype.set = function(value) {
+      return this.container.push_front(value);
+    };
+
+    front_insert_iterator.prototype.next = function() {};
+
+    return front_insert_iterator;
+
+  })(jstl.iterator);
+
+  jstl.accumulate = function(first, last, init) {
+    if (init == null) {
+      init = 0;
+    }
+    first = first.clone();
+    while (first.neq(last)) {
+      init = init + first.get();
+      first.next();
+    }
+    return init;
+  };
+
   jstl.foreach = function(first, last, f) {
     while (first.neq(last)) {
       f(first.get());
@@ -109,6 +356,12 @@
       return v;
     };
 
+    vector.prototype.copy = function(obj) {
+      var v;
+      v = obj.clone();
+      return this.swap(obj);
+    };
+
     vector.prototype.at = function(idx) {
       if (idx < 0 || idx >= this.size()) {
         throw new jstl.out_of_range();
@@ -118,6 +371,10 @@
 
     vector.prototype.get = function(idx) {
       return this.array[idx];
+    };
+
+    vector.prototype.set = function(idx, value) {
+      return this.array[idx] = value;
     };
 
     vector.prototype.back = function() {
@@ -174,15 +431,16 @@
     };
 
     vector.prototype.rbegin = function() {
-      return new this.riterator(this, this.size() - 1);
+      return new jstl.reverse_iterator(this.end());
     };
 
     vector.prototype.rend = function() {
-      return new this.riterator(this, -1);
+      return new jstl.reverse_iterator(this.begin());
     };
 
     vector.prototype.insert = function(it, value) {
-      return this.array.splice(it.idx, 0, value);
+      this.array.splice(it.value(), 0, value);
+      return it.add(1);
     };
 
     vector.prototype.insertRange = function(first, last) {
@@ -193,26 +451,53 @@
     };
 
     vector.prototype.erase = function(it) {
-      return this.array.splice(it.idx, 1);
+      return this.array.splice(it.value(), 1);
     };
 
     vector.prototype.eraseRange = function(first, last) {
-      if (last.idx < first.idx) {
-        last.prev();
-        first.prev();
+      var _ref;
+      if (last.value() < first.value()) {
+        _ref = [last.base(), first.base()], first = _ref[0], last = _ref[1];
       }
-      return this.array.splice(jstl.min(first.idx, last.idx), Math.abs(first.idx - last.idx));
+      return this.array.splice(first.value(), Math.abs(first.idx - last.idx));
     };
 
-    vector.prototype.iterator = (function() {
+    vector.prototype.iterator = (function(_super) {
+
+      __extends(iterator, _super);
 
       function iterator(vector, idx) {
         this.vector = vector;
         this.idx = idx;
+        iterator.__super__.constructor.call(this, jstl.iterator.TYPE_RANDOM);
       }
+
+      iterator.prototype.clone = function() {
+        return new iterator(this.vector, this.idx);
+      };
+
+      iterator.prototype.copy = function(obj) {
+        var i;
+        i = obj.clone();
+        return this.swap(i);
+      };
+
+      iterator.prototype.swap = function(obj) {
+        var _ref, _ref1;
+        _ref = [obj.vector, this.vector], this.vector = _ref[0], obj.vector = _ref[1];
+        return _ref1 = [obj.idx, this.idx], this.idx = _ref1[0], obj.idx = _ref1[1], _ref1;
+      };
 
       iterator.prototype.get = function() {
         return this.vector.get(this.idx);
+      };
+
+      iterator.prototype.set = function(value) {
+        return this.vector.set(this.idx, value);
+      };
+
+      iterator.prototype.value = function() {
+        return this.idx;
       };
 
       iterator.prototype.next = function() {
@@ -257,40 +542,7 @@
 
       return iterator;
 
-    })();
-
-    vector.prototype.riterator = (function(_super) {
-
-      __extends(riterator, _super);
-
-      function riterator() {
-        return riterator.__super__.constructor.apply(this, arguments);
-      }
-
-      riterator.prototype.next = function() {
-        return this.idx--;
-      };
-
-      riterator.prototype.prev = function() {
-        return this.idx++;
-      };
-
-      riterator.prototype.lt = function(it) {
-        console.log("" + this.idx + " > " + it.idx);
-        return this.idx > it.idx;
-      };
-
-      riterator.prototype.add = function(v) {
-        return new riterator(this.vector, this.idx - v);
-      };
-
-      riterator.prototype.sub = function(v) {
-        return new riterator(this.vector, this.idx + v);
-      };
-
-      return riterator;
-
-    })(vector.prototype.iterator);
+    })(jstl.iterator);
 
     return vector;
 

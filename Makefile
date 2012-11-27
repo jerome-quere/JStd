@@ -20,15 +20,20 @@ NAME		=	dist/jstl.js
 SRC_FOLDER	=	src/jstl
 SRC_FILES	=	$(SRC_FOLDER)/_jstl.coffee		\
 			$(SRC_FOLDER)/Exceptions.coffee		\
+			$(SRC_FOLDER)/Iterator.coffee		\
+			$(SRC_FOLDER)/Numeric.coffee		\
 			$(SRC_FOLDER)/Algorithm.coffee		\
 			$(SRC_FOLDER)/Vector.coffee
 
-
 TESTS_FOLDER	=	src/tests
-TESTS_FILES	=	$(TESTS_FOLDER)/vector_tests.coffee
+TESTS_FILES	=	$(TESTS_FOLDER)/vector_tests.coffee	\
+			$(TESTS_FOLDER)/iterator_tests.coffee
 
 all:
 	coffee -c -j $(NAME) $(SRC_FILES)
+
+compile:
+	coffee -c $(SRC_FILES)
 
 watch:
 	coffee -w -c -j $(NAME) $(SRC_FILES)

@@ -17,19 +17,9 @@
 # along with JStl.If not, see <http://www.gnu.org/licenses/>.
 ##
 
-jstl.foreach = (first, last, f) ->
+jstl.accumulate = (first, last, init = 0) ->
+        first = first.clone()
         while first.neq last
-                f first.get()
+                init = init + first.get()
                 first.next()
-        return f;
-
-jstl.min = (obj1, obj2) ->
-        if (typeof obj1 == "number" || typeof obj1 == "bool" || typeof obj1 == "string" || obj1 instanceof Array)
-                return if !(obj2<obj1) then obj1 else obj2;
-        if !(obj2.lt(obj1)) then obj1 else obj2;
-
-jstl.max = (obj1, obj2) ->
-        if (typeof obj1 == "number" || typeof obj1 == "bool" || typeof obj1 == "string" || obj1 instanceof Array)
-                return if (obj1<obj2) then obj2 else obj1;
-        if (obj1.lt(obj2)) then obj2 else obj1;
-
+        return (init)
