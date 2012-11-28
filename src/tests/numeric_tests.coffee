@@ -1,4 +1,4 @@
-#
+##
 # Copyright 2012 Jerome Quere < contact@jeromequere.com >.
 #
 # This file is part of Jstd.
@@ -12,33 +12,16 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 # GNU General Public License for more details.
+#
 # You should have received a copy of the GNU General Public License
 # along with Jstd.If not, see <http://www.gnu.org/licenses/>.
-#
+##
 
-NAME		=	dist/jstd.js
-SRC_FOLDER	=	src/jstd
-SRC_FILES	=	$(SRC_FOLDER)/_jstd.coffee		\
-			$(SRC_FOLDER)/Exceptions.coffee		\
-			$(SRC_FOLDER)/Iterator.coffee		\
-			$(SRC_FOLDER)/Numeric.coffee		\
-			$(SRC_FOLDER)/Algorithm.coffee		\
-			$(SRC_FOLDER)/Vector.coffee
+assert = require("assert")
+jstd = require('../../dist/jstd.js')
 
-TESTS_FOLDER	=	src/tests
-TESTS_FILES	=	$(TESTS_FOLDER)/algorithm_tests.coffee	\
-			$(TESTS_FOLDER)/numeric_tests.coffee	\
-			$(TESTS_FOLDER)/vector_tests.coffee	\
-			$(TESTS_FOLDER)/iterator_tests.coffee
-
-all:
-	@coffee -c -j $(NAME) $(SRC_FILES)
-
-compile:
-	@coffee -c $(SRC_FILES)
-
-watch:
-	@coffee -w -c -j $(NAME) $(SRC_FILES)
-
-test:
-	@mocha --compilers 'coffee:coffee-script' $(TESTS_FILES)
+describe 'numeric', () ->
+        describe 'accumulate', () ->
+                v = new jstd.vector();
+                jstd.fill_n(jstd.back_inserter(v), 10, 10);
+                assert.equal(jstd.accumulate(v.begin(), v.end()), 10 * 10)

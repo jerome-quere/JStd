@@ -42,3 +42,11 @@ jstd.copy = (first, last, it) ->
                 first.next()
                 it.next()
         return it;
+
+jstd.fill_n = (first, n, v) ->
+        first = first.clone()
+        i = 0
+        while i < n
+                first.set(v)
+                first.next()
+                i++;

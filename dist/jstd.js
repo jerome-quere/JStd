@@ -216,7 +216,7 @@
     }
 
     insert_iterator.prototype.clone = function() {
-      return new insert_iterator(this.container);
+      return new insert_iterator(this.container, this.it);
     };
 
     insert_iterator.prototype.copy = function(obj) {
@@ -354,6 +354,19 @@
     return it;
   };
 
+  jstd.fill_n = function(first, n, v) {
+    var i, _results;
+    first = first.clone();
+    i = 0;
+    _results = [];
+    while (i < n) {
+      first.set(v);
+      first.next();
+      _results.push(i++);
+    }
+    return _results;
+  };
+
   jstd.vector = (function() {
 
     function vector() {
@@ -363,7 +376,7 @@
     vector.prototype.clone = function() {
       var v;
       v = new jstd.vector();
-      v.insertRange(this.begin(), this.end());
+      v.insertRange(v.begin(), this.begin(), this.end());
       return v;
     };
 
@@ -417,10 +430,18 @@
     };
 
     vector.prototype.resize = function(size) {
+      var _results;
       if (size < 0) {
         size = 0;
       }
-      return this.array.splice(size, this.size());
+      if (size < this.size()) {
+        this.array.splice(size, this.size());
+      }
+      _results = [];
+      while (this.size() < size) {
+        _results.push(this.array.push(null));
+      }
+      return _results;
     };
 
     vector.prototype.clear = function() {

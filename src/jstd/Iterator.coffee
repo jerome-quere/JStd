@@ -91,7 +91,7 @@ class jstd.insert_iterator  extends jstd.iterator
         constructor: (@container, @it) ->
                 super jstd.iterator.TYPE_OUTPUT
 
-        clone: () -> new insert_iterator(@container);
+        clone: () -> new insert_iterator(@container, @it);
         copy: (obj) -> @swap(obj.clone())
         get: () ->
         set: (value) ->

@@ -23,7 +23,7 @@ class jstd.vector
 
         clone: () ->
                 v = new jstd.vector()
-                v.insertRange @begin(), @end()
+                v.insertRange v.begin(), @begin(), @end()
                 return (v)
 
         copy: (obj) ->
@@ -47,7 +47,10 @@ class jstd.vector
         resize: (size) ->
                 if (size < 0)
                         size = 0;
-                @array.splice(size, @size());
+                if size < @size()
+                        @array.splice(size, @size());
+                while @size() < size
+                        @array.push(null)
         clear: () ->
                 @resize(0);
 
@@ -64,7 +67,8 @@ class jstd.vector
                 @array.splice(it.value(), 0, value)
                 return (it.add(1));
 
-        insertRange: (it, first, last) -> jstd.copy(first, last, jstd.inserter(this, it))
+        insertRange: (it, first, last) ->
+                jstd.copy(first, last, jstd.inserter(this, it))
 
         erase: (it) ->
                 @array.splice(it.value(), 1);
