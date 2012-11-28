@@ -44,7 +44,7 @@ JStd declare some base exception type.
 
 * exception
   * logic_error
-    - out_of_range
+     * out_of_range
 
 Iterator
 --------
@@ -66,9 +66,12 @@ Here an example of iterator working
 
 Difference between C++ and JStd
 
+	*it		---> it.get()
+	*it = 42	---> it.set(42)
 	it++		---> it.next()
 	it--		---> it.sub()
 	it2 = it + 2	---> it2 = it.add(2)
+	it2 = it - 2	---> it2 = it.sub(2)
 
 ### inserter_iterator ###
 
