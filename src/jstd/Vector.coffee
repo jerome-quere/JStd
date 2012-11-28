@@ -64,9 +64,7 @@ class jstd.vector
                 @array.splice(it.value(), 0, value)
                 return (it.add(1));
 
-        insertRange: (first, last) ->
-                jstd.foreach first, last, (e) =>
-                        @push_back(e)
+        insertRange: (it, first, last) -> jstd.copy(first, last, jstd.inserter(this, it))
 
         erase: (it) ->
                 @array.splice(it.value(), 1);

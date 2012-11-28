@@ -95,7 +95,7 @@ describe 'vector', () ->
                         for i in [0..10]
                                 v.push_back(i)
                         i = 0;
-                        jstd.foreach v.begin(), v.end(), (e) ->
+                        jstd.for_each v.begin(), v.end(), (e) ->
                                 assert.equal(e, i)
                                 i++
 
@@ -105,7 +105,7 @@ describe 'vector', () ->
                         for i in [0..10]
                                 v.push_back(i)
                         i = 10;
-                        jstd.foreach v.rbegin(), v.rend(), (e) ->
+                        jstd.for_each v.rbegin(), v.rend(), (e) ->
                                 assert.equal(e, i)
                                 i--
 

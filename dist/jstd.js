@@ -305,7 +305,7 @@
     return init;
   };
 
-  jstd.foreach = function(first, last, f) {
+  jstd.for_each = function(first, last, f) {
     while (first.neq(last)) {
       f(first.get());
       first.next();
@@ -341,6 +341,17 @@
     } else {
       return obj1;
     }
+  };
+
+  jstd.copy = function(first, last, it) {
+    first = first.clone();
+    it = it.clone();
+    while (first.neq(last)) {
+      it.set(first.get());
+      first.next();
+      it.next();
+    }
+    return it;
   };
 
   jstd.vector = (function() {
@@ -443,11 +454,8 @@
       return it.add(1);
     };
 
-    vector.prototype.insertRange = function(first, last) {
-      var _this = this;
-      return jstd.foreach(first, last, function(e) {
-        return _this.push_back(e);
-      });
+    vector.prototype.insertRange = function(it, first, last) {
+      return jstd.copy(first, last, jstd.inserter(this, it));
     };
 
     vector.prototype.erase = function(it) {

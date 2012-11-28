@@ -17,7 +17,7 @@
 # along with Jstd.If not, see <http://www.gnu.org/licenses/>.
 ##
 
-jstd.foreach = (first, last, f) ->
+jstd.for_each = (first, last, f) ->
         while first.neq last
                 f first.get()
                 first.next()
@@ -32,3 +32,13 @@ jstd.max = (obj1, obj2) ->
         if (typeof obj1 == "number" || typeof obj1 == "bool" || typeof obj1 == "string" || obj1 instanceof Array)
                 return if (obj1<obj2) then obj2 else obj1;
         if (obj1.lt(obj2)) then obj2 else obj1;
+
+
+jstd.copy = (first, last, it) ->
+        first = first.clone();
+        it = it.clone()
+        while first.neq last
+                it.set(first.get());
+                first.next()
+                it.next()
+        return it;
