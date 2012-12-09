@@ -319,3 +319,8 @@ Returns a string representation of the vector
 Return a javascript array with all the vector content
 
        Array vector::toArray()
+
+List
+----
+
+//TODO write list documentation
