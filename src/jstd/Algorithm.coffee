@@ -50,3 +50,9 @@ jstd.fill_n = (first, n, v) ->
                 first.set(v)
                 first.next()
                 i++;
+
+jstd.toArray = (first, last) ->
+        array = new Array()
+        jstd.for_each first, last (e)->
+                array.push_back(e)
+        return (array)

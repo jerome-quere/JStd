@@ -163,4 +163,103 @@ Sets value to the first n elements in the sequence pointed by first.
 Vector
 ------
 
-**Doc not ready**
+### construct() ###
+
+Default constuctor
+
+### clone() ###
+
+Return a copy of the vector
+
+### copy(vector v) ###
+
+See Operator Overloading
+
+### at(int n) ###
+
+Returns the value of the element at position n in the vector.
+The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it is not.
+
+### get(int n) ###
+
+Same as at at without boundery checking
+
+### set(int n, val) ###
+
+Set the value of the element at position n in the vector to val.
+
+### back ##
+
+Returns the value of the last element in the vector
+
+### front ###
+
+Returns the value of the first element in the vector
+
+### push_back(val) ###
+
+Adds a new element at the end of the vector, after its current last element.
+
+### pop_back() ###
+
+Removes the last element in the vector
+
+### size() ###
+
+Returns the number of elements in the vector.
+
+### empty() ###
+
+Returns whether the vector is empty
+
+### resize(int n) ###
+
+Resizes the container so that it contains n elements.
+
+### clear() ###
+
+Removes all elements from the vector.
+
+### swap(vector v) ###
+
+Exchanges the content of the container by the content of v
+
+### begin() ###
+
+Returns an iterator pointing to the first element in the vector.
+
+### end () ###
+
+Returns an iterator referring to the past-the-end element in the vector container.
+
+### rbegin() ###
+
+Returns a reverse iterator pointing to the last element in the vector.
+
+### rend() ###
+
+Returns a reverse iterator pointing to the element right before the first element in the vector.
+
+### insert(iterator it, value) ###
+
+The vector is extended by inserting new element value before the element pointed by the iterator it.
+
+### insertRange(iterator it, iterator first, iterator last) ###
+
+The vector is extended by inserting new elements present between the first and last iterator before the element pointed by the iterator it.
+
+### erase(iterator it) ###
+
+Removes from the vector a single element pointed by it/
+
+### eraseRange(iterator first, iterator last) ###
+
+Removes front the vector all the elements present in the interval [first, last)
+
+### toString() ###
+
+Returns a string representation of the vector
+
+### toArray() ###
+
+Return a javascript array with all the vector content

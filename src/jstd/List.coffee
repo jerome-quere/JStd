@@ -82,7 +82,6 @@ class jstd.list
                         @back_.prev.next = @back
                 @size_--
 
-
         insert: (it, value) ->
                 if (it.eq @end())
                         @push_back(value)
@@ -125,6 +124,8 @@ class jstd.list
                         if str != "" then str = "#{str}, "
                         str = "#{str}#{i}"
                 return "{#{str}}"
+
+        toArray: () -> jstd.toArray(@begin(), @last())
 
 
         class list::node

@@ -25,11 +25,7 @@ class jstd.vector
                 v = new jstd.vector()
                 v.insertRange v.begin(), @begin(), @end()
                 return (v)
-
-        copy: (obj) ->
-                v = obj.clone();
-                @swap(obj)
-
+        copy: (obj) -> @swap(obj.clone())
         at: (idx) ->
                 if (idx < 0 || idx >= @size())
                         throw new jstd.out_of_range()
@@ -39,7 +35,6 @@ class jstd.vector
         set:   (idx, value) -> @array[idx] = value
         back:  () -> @array[@size() - 1]
         front: () -> @array[0]
-        data:  () -> @array
         push_back:  (value) -> @array.push(value)
         pop_back:  (value) -> @array.pop()
         size:  () -> @array.length
@@ -81,6 +76,9 @@ class jstd.vector
 
         toString: () ->
                 return "[#{@array.join(',')}]";
+
+        toArray: () ->
+                return (@array);
 
         class vector::iterator extends jstd.iterator
                 constructor: (@vector, @idx) ->

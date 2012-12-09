@@ -354,9 +354,7 @@
     };
 
     vector.prototype.copy = function(obj) {
-      var v;
-      v = obj.clone();
-      return this.swap(obj);
+      return this.swap(obj.clone());
     };
 
     vector.prototype.at = function(idx) {
@@ -380,10 +378,6 @@
 
     vector.prototype.front = function() {
       return this.array[0];
-    };
-
-    vector.prototype.data = function() {
-      return this.array;
     };
 
     vector.prototype.push_back = function(value) {
