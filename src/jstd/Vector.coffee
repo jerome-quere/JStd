@@ -48,7 +48,7 @@ class jstd.vector
                 if (size < 0)
                         size = 0;
                 if size < @size()
-                        @array.splice(size, @size());
+                        @eraseRange(jstd.advance(@begin(), size), @end())
                 while @size() < size
                         @array.push(null)
         clear: () ->
@@ -72,11 +72,15 @@ class jstd.vector
 
         erase: (it) ->
                 @array.splice(it.value(), 1);
+                return (it.next())
 
         eraseRange: (first, last) ->
                 if last.value() < first.value()
                         [first, last] = [last.base(), first.base()];
                 @array.splice(first.value(), Math.abs(first.idx - last.idx))
+
+        toString: () ->
+                return "[#{@array.join(',')}]";
 
         class vector::iterator extends jstd.iterator
                 constructor: (@vector, @idx) ->
@@ -97,8 +101,12 @@ class jstd.vector
                 set:  (value) ->
                         @vector.set(@idx, value);
                 value: () -> @idx;
-                next: () -> @idx++;
-                prev: () -> @idx--;
+                next: () ->
+                        @idx++;
+                        return this
+                prev: () ->
+                        @idx--;
+                        return this
                 eq:   (it) -> @idx == it.idx
                 lt:   (it) -> @idx < it.idx
                 neq:  (it) -> !@eq(it)

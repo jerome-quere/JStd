@@ -29,7 +29,13 @@ describe 'iterator', () ->
                         it = v.begin();
                         jstd.advance(it, 5);
                         assert.equal(it.get(), 5)
-                        #TODO Add test with non random access iterator
+
+                        l = new jstd.list()
+                        for i in [0..10]
+                                l.push_back(i)
+                        it = l.begin();
+                        jstd.advance(it, 5);
+                        assert.equal(it.get(), 5)
 
         describe '#distance', () ->
                 it 'Return distance between iterators', () ->
@@ -37,8 +43,10 @@ describe 'iterator', () ->
                         for i in [0..10]
                                 v.push_back(i)
                         assert.equal(jstd.distance(v.begin(), v.end()), 11)
-                        assert.equal(jstd.distance(v.rbegin(), v.rend()), 11)
-                        #TODO Add test with non random access iterator
+                        l = new jstd.list()
+                        for i in [0..10]
+                                l.push_back(i)
+                        assert.equal(jstd.distance(l.begin(), l.end()), 11)
 
         describe '#reverse_iterator', () ->
                 describe '#random_iterator', () ->
@@ -50,7 +58,16 @@ describe 'iterator', () ->
                                 jstd.for_each v.rbegin(), v.rend(), (e)->
                                         assert.equal(e, i)
                                         i--;
-                        #TODO Add test with bidirectional iterator
+
+                                l = new jstd.list()
+                                for i in [0..10]
+                                        l.push_back(i)
+                                i = 10;
+                                jstd.for_each l.rbegin(), l.rend(), (e)->
+                                        assert.equal(e, i)
+                                        i--;
+
+
         describe '#insert_iterator', () ->
                 it 'should insert in container', ()->
                         v = new jstd.vector()
@@ -77,4 +94,9 @@ describe 'iterator', () ->
 
         describe '#front_insert_iterator', () ->
                 it 'should push_front container', ()->
-                        #TODO Add test with A containner that allow push front
+                        l = new jstd.list()
+                        it = jstd.back_inserter l;
+                        for i in [0..5]
+                                it.set(i)
+                                it.next()
+                        assert.equal(jstd.accumulate(l.begin(), l.end()), 1+2+3+4+5);

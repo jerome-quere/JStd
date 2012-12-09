@@ -32,9 +32,12 @@ class jstd.iterator
 jstd.advance = (i, n) ->
         if (i.getType() == jstd.iterator.TYPE_RANDOM)
                 i.copy(i.add(n))
-                return
-        for i in [0..n]
+                return i
+        p = 0
+        while p < n
                 i.next()
+                p++
+        return i
 
 jstd.distance = (first, second) ->
         if (first.getType() == jstd.iterator.TYPE_RANDOM)
@@ -53,29 +56,25 @@ class jstd.reverse_iterator extends jstd.iterator
 
         clone: () -> new reverse_iterator(@baseIt)
 
-        copy: (obj) ->
-                i = obj.clone();
-                @swap(i)
+        copy: (obj) -> @swap(obj.clone())
 
         swap: (obj) ->
                 [@baseIt, obj.baseIt] = [obj.baseIt, @baseIt]
 
         base: () -> @baseIt
-        get:  () ->
-                @baseIt.sub(1).get()
+        get:  () -> @baseIt.clone().prev().get();
+
         set:  (value) ->
                 @baseIt.sub(1).set(value)
-        value: () -> @baseIt.sub(1).value();
-        next: () -> @baseIt.prev();
-        prev: () -> @baseIt.next();
+        next: () ->
+                @baseIt.prev();
+                return this
+        prev: () ->
+                @baseIt.next();
+                return this
         eq:   (it) -> @baseIt.eq it.baseIt
-        lt:   (it) -> @baseIt.lt it.baseIt
         neq:  (it) -> !@eq(it)
-        lte:  (it) -> @lt(it) || @eq(it)
-        gt:   (it) -> !@lte(it)
-        gte:  (it) -> @gt(it) || @eq(it)
-        add:  (n)  -> new reverse_iterator(@baseIt.sub(n));
-        sub:  (n)  -> new reverse_iterator(@baseIt.add(n));
+
 
 jstd.inserter =  (container, it) ->
         new jstd.insert_iterator(container, it)

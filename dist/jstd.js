@@ -83,16 +83,17 @@
   })();
 
   jstd.advance = function(i, n) {
-    var _i, _results;
+    var p;
     if (i.getType() === jstd.iterator.TYPE_RANDOM) {
       i.copy(i.add(n));
-      return;
+      return i;
     }
-    _results = [];
-    for (i = _i = 0; 0 <= n ? _i <= n : _i >= n; i = 0 <= n ? ++_i : --_i) {
-      _results.push(i.next());
+    p = 0;
+    while (p < n) {
+      i.next();
+      p++;
     }
-    return _results;
+    return i;
   };
 
   jstd.distance = function(first, second) {
@@ -123,9 +124,7 @@
     };
 
     reverse_iterator.prototype.copy = function(obj) {
-      var i;
-      i = obj.clone();
-      return this.swap(i);
+      return this.swap(obj.clone());
     };
 
     reverse_iterator.prototype.swap = function(obj) {
@@ -138,55 +137,29 @@
     };
 
     reverse_iterator.prototype.get = function() {
-      return this.baseIt.sub(1).get();
+      return this.baseIt.clone().prev().get();
     };
 
     reverse_iterator.prototype.set = function(value) {
       return this.baseIt.sub(1).set(value);
     };
 
-    reverse_iterator.prototype.value = function() {
-      return this.baseIt.sub(1).value();
-    };
-
     reverse_iterator.prototype.next = function() {
-      return this.baseIt.prev();
+      this.baseIt.prev();
+      return this;
     };
 
     reverse_iterator.prototype.prev = function() {
-      return this.baseIt.next();
+      this.baseIt.next();
+      return this;
     };
 
     reverse_iterator.prototype.eq = function(it) {
       return this.baseIt.eq(it.baseIt);
     };
 
-    reverse_iterator.prototype.lt = function(it) {
-      return this.baseIt.lt(it.baseIt);
-    };
-
     reverse_iterator.prototype.neq = function(it) {
       return !this.eq(it);
-    };
-
-    reverse_iterator.prototype.lte = function(it) {
-      return this.lt(it) || this.eq(it);
-    };
-
-    reverse_iterator.prototype.gt = function(it) {
-      return !this.lte(it);
-    };
-
-    reverse_iterator.prototype.gte = function(it) {
-      return this.gt(it) || this.eq(it);
-    };
-
-    reverse_iterator.prototype.add = function(n) {
-      return new reverse_iterator(this.baseIt.sub(n));
-    };
-
-    reverse_iterator.prototype.sub = function(n) {
-      return new reverse_iterator(this.baseIt.add(n));
     };
 
     return reverse_iterator;
@@ -435,7 +408,7 @@
         size = 0;
       }
       if (size < this.size()) {
-        this.array.splice(size, this.size());
+        this.eraseRange(jstd.advance(this.begin(), size), this.end());
       }
       _results = [];
       while (this.size() < size) {
@@ -480,7 +453,8 @@
     };
 
     vector.prototype.erase = function(it) {
-      return this.array.splice(it.value(), 1);
+      this.array.splice(it.value(), 1);
+      return it.next();
     };
 
     vector.prototype.eraseRange = function(first, last) {
@@ -489,6 +463,10 @@
         _ref = [last.base(), first.base()], first = _ref[0], last = _ref[1];
       }
       return this.array.splice(first.value(), Math.abs(first.idx - last.idx));
+    };
+
+    vector.prototype.toString = function() {
+      return "[" + (this.array.join(',')) + "]";
     };
 
     vector.prototype.iterator = (function(_super) {
@@ -530,11 +508,13 @@
       };
 
       iterator.prototype.next = function() {
-        return this.idx++;
+        this.idx++;
+        return this;
       };
 
       iterator.prototype.prev = function() {
-        return this.idx--;
+        this.idx--;
+        return this;
       };
 
       iterator.prototype.eq = function(it) {
@@ -578,5 +558,261 @@
   })();
 
   module.exports = jstd;
+
+  jstd.list = (function() {
+
+    function list() {
+      var node;
+      this.size_ = 0;
+      node = new this.node();
+      this.front_ = node;
+      this.back_ = node;
+      this.nextNodeIdx = 0;
+    }
+
+    list.prototype.clone = function() {
+      var o;
+      o = new list();
+      o.insertRange(o.begin(), this.begin(), this.end());
+      return o;
+    };
+
+    list.prototype.copy = function(obj) {
+      return this.swap(obj.clone());
+    };
+
+    list.prototype.empty = function() {
+      return this.size_ === 0;
+    };
+
+    list.prototype.size = function() {
+      return this.size_;
+    };
+
+    list.prototype.resize = function(size) {
+      var _results;
+      if (size < 0) {
+        size = 0;
+      }
+      if (size < this.size()) {
+        this.eraseRange(jstd.advance(this.begin(), size), this.end());
+      }
+      _results = [];
+      while (this.size() < size) {
+        _results.push(this.push_back(null));
+      }
+      return _results;
+    };
+
+    list.prototype.front = function() {
+      return this.front_.value;
+    };
+
+    list.prototype.back = function() {
+      return this.back_.prev.value;
+    };
+
+    list.prototype.begin = function() {
+      return new this.iterator(this, this.front_);
+    };
+
+    list.prototype.end = function() {
+      return new this.iterator(this, this.back_);
+    };
+
+    list.prototype.rbegin = function() {
+      return new jstd.reverse_iterator(this.end());
+    };
+
+    list.prototype.rend = function() {
+      return new jstd.reverse_iterator(this.begin());
+    };
+
+    list.prototype.clear = function() {
+      var node;
+      node = new this.node();
+      this.front_ = node;
+      this.back_ = node;
+      return this.size_ = 0;
+    };
+
+    list.prototype.swap = function(obj) {
+      var _ref, _ref1, _ref2;
+      _ref = [obj.front, this.front_], this.front_ = _ref[0], obj.front = _ref[1];
+      _ref1 = [obj.back, this.back_], this.back_ = _ref1[0], obj.back = _ref1[1];
+      return _ref2 = [obj.size_, this.size_], this.size_ = _ref2[0], obj.size_ = _ref2[1], _ref2;
+    };
+
+    list.prototype.push_front = function(value) {
+      var node, _ref;
+      node = new this.node();
+      _ref = [value, null, this.front_, ++this.nextNodeIdx], node.value = _ref[0], node.prev = _ref[1], node.next = _ref[2], node.idx = _ref[3];
+      this.size_++;
+      return this.front_ = node;
+    };
+
+    list.prototype.push_back = function(value) {
+      var node, _ref;
+      node = new this.node();
+      _ref = [value, this.back_.prev, this.back_, ++this.nextNodeIdx], node.value = _ref[0], node.prev = _ref[1], node.next = _ref[2], node.idx = _ref[3];
+      this.size_++;
+      this.back_.prev = node;
+      if (node.prev) {
+        node.prev.next = node;
+      }
+      if (this.front_.idx === -1) {
+        return this.front_ = node;
+      }
+    };
+
+    list.prototype.pop_front = function() {
+      this.front_ = this.front_.next;
+      return this.size_--;
+    };
+
+    list.prototype.pop_back = function() {
+      this.back_.prev = this.back_.prev.prev;
+      if (this.back_.prev) {
+        this.back_.prev.next = this.back;
+      }
+      return this.size_--;
+    };
+
+    list.prototype.insert = function(it, value) {
+      var node, _ref, _ref1;
+      if (it.eq(this.end())) {
+        this.push_back(value);
+        return it;
+      } else if (it.eq(this.begin())) {
+        this.push_front(value);
+      } else {
+        node = new this.node();
+        _ref = [value, it.node.prev, it.node], node.value = _ref[0], node.prev = _ref[1], node.next = _ref[2];
+        _ref1 = [node, node], it.node.prev.next = _ref1[0], it.node.prev = _ref1[1];
+        this.size_++;
+      }
+      return it.next();
+    };
+
+    list.prototype.insertRange = function(it, first, last) {
+      return jstd.copy(first, last, jstd.inserter(this, it));
+    };
+
+    list.prototype.erase = function(it) {
+      var _ref;
+      if (it.eq(this.end())) {
+        this.pop_back(value);
+      } else if (it.eq(this.begin())) {
+        this.pop_front(value);
+      } else {
+        _ref = [it.node.next, it.node.prev], it.node.prev.next = _ref[0], it.node.next.prev = _ref[1];
+        this.size_--;
+      }
+      return it.next();
+    };
+
+    list.prototype.eraseRange = function(first, last) {
+      var nbElem;
+      if (first.eq(last)) {
+        return;
+      }
+      nbElem = jstd.distance(first, last);
+      if (first.eq(this.begin())) {
+        this.front_ = last.node;
+      }
+      if (last.eq(this.end())) {
+        this.back_.prev = first.node.prev;
+      }
+      if (last.neq(this.end())) {
+        last.node.prev = first.prev;
+      }
+      if (last.neq(this.begin())) {
+        first.prev.next = last.node;
+      }
+      return this.size_ = this.size_ - nbElem;
+    };
+
+    list.prototype.toString = function() {
+      var str;
+      str = "";
+      jstd.for_each(this.begin(), this.end(), function(i) {
+        if (str !== "") {
+          str = "" + str + ", ";
+        }
+        return str = "" + str + i;
+      });
+      return "{" + str + "}";
+    };
+
+    list.prototype.node = (function() {
+
+      function node() {
+        this.prev = null;
+        this.next = null;
+        this.value = null;
+        this.idx = -1;
+      }
+
+      return node;
+
+    })();
+
+    list.prototype.iterator = (function(_super) {
+
+      __extends(iterator, _super);
+
+      function iterator(list, node) {
+        this.list = list;
+        this.node = node;
+        iterator.__super__.constructor.call(this, jstd.iterator.TYPE_BIDIRECTIONAL);
+      }
+
+      iterator.prototype.clone = function() {
+        return new iterator(this.list, this.node);
+      };
+
+      iterator.prototype.copy = function(obj) {
+        return this.swap(obj.clone());
+      };
+
+      iterator.prototype.swap = function(obj) {
+        var _ref, _ref1;
+        _ref = [obj.list, this.list], this.list = _ref[0], obj.list = _ref[1];
+        return _ref1 = [obj.node, this.node], this.node = _ref1[0], obj.node = _ref1[1], _ref1;
+      };
+
+      iterator.prototype.get = function() {
+        return this.node.value;
+      };
+
+      iterator.prototype.set = function(value) {
+        return this.node.value = value;
+      };
+
+      iterator.prototype.next = function() {
+        this.node = this.node.next;
+        return this;
+      };
+
+      iterator.prototype.prev = function() {
+        this.node = this.node.prev;
+        return this;
+      };
+
+      iterator.prototype.eq = function(it) {
+        return this.node.idx === it.node.idx;
+      };
+
+      iterator.prototype.neq = function(it) {
+        return !this.eq(it);
+      };
+
+      return iterator;
+
+    })(jstd.iterator);
+
+    return list;
+
+  })();
 
 }).call(this);

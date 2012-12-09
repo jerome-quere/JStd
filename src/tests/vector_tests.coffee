@@ -79,6 +79,8 @@ describe 'vector', () ->
                         assert.equal(v.size(), 5)
                         v.resize(-1)
                         assert.equal(v.size(), 0)
+                        v.resize(10)
+                        assert.equal(v.size(), 10)
 
 
         describe '#clear', () ->
@@ -140,13 +142,3 @@ describe 'vector', () ->
                         assert.equal(v.get(1), 2)
                         v.eraseRange(v.begin(), v.end().sub(1));
                         assert.equal(jstd.accumulate(v.begin(), v.end()), 10)
-
-                        v = new jstd.vector()
-                        for i in [0..10]
-                                v.push_back(i)
-                        v.erase(v.rbegin().add(1))
-                        assert.equal(jstd.accumulate(v.begin(), v.end()), 1+2+3+4+5+6+7+8+10)
-                        assert.equal(v.get(9), 10)
-                        assert.equal(v.size(), 10)
-                        v.eraseRange(v.rbegin(), v.rend().sub(1));
-                        assert.equal(jstd.accumulate(v.begin(), v.end()), 0)
