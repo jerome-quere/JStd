@@ -340,6 +340,15 @@
     return _results;
   };
 
+  jstd.toArray = function(first, last) {
+    var array;
+    array = new Array();
+    jstd.for_each(first, last, function(e) {
+      return array.push(e);
+    });
+    return array;
+  };
+
   jstd.vector = (function() {
 
     function vector() {
@@ -461,6 +470,10 @@
 
     vector.prototype.toString = function() {
       return "[" + (this.array.join(',')) + "]";
+    };
+
+    vector.prototype.toArray = function() {
+      return this.array;
     };
 
     vector.prototype.iterator = (function(_super) {
@@ -736,6 +749,10 @@
         return str = "" + str + i;
       });
       return "{" + str + "}";
+    };
+
+    list.prototype.toArray = function() {
+      return jstd.toArray(this.begin(), this.last());
     };
 
     list.prototype.node = (function() {

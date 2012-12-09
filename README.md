@@ -160,106 +160,162 @@ Sets value to the first n elements in the sequence pointed by first.
 
 	jstd.fill_n(output_iterator first, n, v)
 
+### toArray ###
+
+Returns an array fill with all the element present beween [fisrt, last)
+
+	jstd.toArray(iterator first, iterator last)
+
 Vector
 ------
 
-### construct() ###
+### construct ###
 
 Default constuctor
 
-### clone() ###
+	v = new jstd.vector()
+
+### clone ###
 
 Return a copy of the vector
 
-### copy(vector v) ###
+       vector vector::clone()
+
+### copy ###
 
 See Operator Overloading
 
-### at(int n) ###
+	void vector::copy(vector v)
+
+### at ###
 
 Returns the value of the element at position n in the vector.
 The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it is not.
 
-### get(int n) ###
+	value vector::at(int n)
+
+### get ###
 
 Same as at at without boundery checking
 
-### set(int n, val) ###
+	value vector::get(int n)
+
+### set ###
 
 Set the value of the element at position n in the vector to val.
 
+	void vector::set(int n, val)
+
 ### back ##
 
-Returns the value of the last element in the vector
+Returns the value of the last element in the vector.
+
+	value vector::back()
 
 ### front ###
 
 Returns the value of the first element in the vector
 
-### push_back(val) ###
+	value vector::front()
+
+### push_back ###
 
 Adds a new element at the end of the vector, after its current last element.
 
-### pop_back() ###
+	void vector::push_back(value)
+
+### pop_back ###
 
 Removes the last element in the vector
 
-### size() ###
+	void vector::pop_back()
+
+### size ###
 
 Returns the number of elements in the vector.
 
-### empty() ###
+	void vector::size()
 
-Returns whether the vector is empty
+### empty ###
 
-### resize(int n) ###
+Returns whether the vector is empty.
+
+	bool vector::empty()
+
+### resize ###
 
 Resizes the container so that it contains n elements.
 
-### clear() ###
+	void vector::resize(int n)
+
+### clear ###
 
 Removes all elements from the vector.
 
-### swap(vector v) ###
+	void vector::clear()
 
-Exchanges the content of the container by the content of v
+### swap ###
 
-### begin() ###
+Exchanges the content of the container by the content of v.
+
+	void vector::swap(vector v)
+
+### begin ###
 
 Returns an iterator pointing to the first element in the vector.
 
-### end () ###
+	iterator vector::begin()
+
+### end ###
 
 Returns an iterator referring to the past-the-end element in the vector container.
 
-### rbegin() ###
+	iterator  vector::end()
+
+### rbegin ###
 
 Returns a reverse iterator pointing to the last element in the vector.
 
-### rend() ###
+	reverse_iterator vector::rbegin()
+
+### rend ###
 
 Returns a reverse iterator pointing to the element right before the first element in the vector.
 
-### insert(iterator it, value) ###
+	reverse_iterator vector::rend()
+
+### insert ###
 
 The vector is extended by inserting new element value before the element pointed by the iterator it.
 
-### insertRange(iterator it, iterator first, iterator last) ###
+	iterator vector::insert(iterator it, value)
+
+### insertRange ###
 
 The vector is extended by inserting new elements present between the first and last iterator before the element pointed by the iterator it.
 
-### erase(iterator it) ###
+	iterator vector::insertRange(iterator it, iterator first, iterator last)
 
-Removes from the vector a single element pointed by it/
+### erase ###
+
+Removes from the vector a single element pointed by it.
+
+	void vector::erase(iterator it)
 
 ### eraseRange(iterator first, iterator last) ###
 
 Removes front the vector all the elements present in the interval [first, last)
 
-### toString() ###
+	void vector::eraseRange(iterator it, iterator last)
+
+### toString ###
 
 Returns a string representation of the vector
 
-### toArray() ###
+	String vector::toString()
+
+### toArray ###
 
 Return a javascript array with all the vector content
+
+       Array vector::toArray()

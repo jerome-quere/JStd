@@ -59,3 +59,14 @@ describe 'algorithm', () ->
                         v.resize(10)
                         jstd.fill_n(v.begin(), 10, 10)
                         assert.equal(jstd.accumulate(v.begin(), v.end(), 0), 10*10)
+
+        describe '#toArray', () ->
+                it 'Build an array with all the element between two iterators', () ->
+                        l = new jstd.list();
+                        for i in [0..10]
+                                l.push_back(i)
+                        a = jstd.toArray(l.begin(), l.end());
+                        p = 0
+                        for i in a
+                                assert.equal(i, p)
+                                p++

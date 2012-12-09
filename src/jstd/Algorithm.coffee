@@ -53,6 +53,6 @@ jstd.fill_n = (first, n, v) ->
 
 jstd.toArray = (first, last) ->
         array = new Array()
-        jstd.for_each first, last (e)->
-                array.push_back(e)
+        jstd.for_each first, last, (e)->
+                array.push(e)
         return (array)
