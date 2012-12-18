@@ -6,19 +6,19 @@ Bringing the power of the C++ standard library to the JavaScript
 Introduction
 ------------
 
-The javascript standard library only contain Number, String, Boolean, Date, Regex, Array and Object. Javascript application becoming bigger and biger
-the JStd intent to bring usefull tool for creating more complte and powerfull application.
+The JavaScript standard library only contain Number, String, Boolean, Date, Regex, Array and Object. JavaScript application becoming bigger and bigger
+the JStd intent to bring useful tool for creating more complete and powerful application.
 
 Remark
 ------
 
-Event if JStd mostly try to copy the C++ standard library, some missing feature from C++ such as opperator overlowding force JStd to change
+Event if JStd mostly try to copy the C++ standard library, some missing feature from C++ such as operator overloading force JStd to change
 some of the API specification.
 
-Instalation
+Installation
 -----------
 
-Just download the release javascript file jstd.js and copy it in your application folder.
+Just download the release JavaScript file jstd.js and copy it in your application folder.
 
      jstd = require('jstd.js');
 
@@ -49,7 +49,7 @@ JStd declare some base exception type.
 Iterator
 --------
 
-One of the most powerfull tools of the C++ library are the iterators.
+One of the most powerful tools of the C++ library are the iterators.
 
 Here an example of iterator working
 
@@ -75,7 +75,7 @@ Difference between C++ and JStd
 
 ### inserter_iterator ###
 
-This class allow some algorithm such as copy to insert in a container instead of overwriting existing content.
+This class allows some algorithm such as copy to insert in a container instead of overwriting existing content.
 
 Here an example
 
@@ -83,17 +83,17 @@ Here an example
 	//Filling the list
 	var vector = jstd.vector()
 	var it = jstl.inserter(vector, vector.begin())
-	jstl.copy(list.begin(), list.end(), it) //Insert the content of the list in the vector without ovewriting the content.
+	jstl.copy(list.begin(), list.end(), it) //Insert the contents of the list in the vector without overwriting the content.
 
 ### back_inserter_iterator ###
 
-This iterator allow some algorithm such as copy to push_back data in a container instead of overwriting existing content.
+This iterator allows some algorithm such as copy to push_back data in a container instead of overwriting existing content.
 
 *see example for* `inserter_iterator`
 
 ### front_inserter_iterator ###
 
-This iterator allow some algorithm such as copy to push_front data in a container instead of overwriting existing content.
+This iterator allows some algorithm such as copy to push_front data in a container instead of overwriting existing content.
 
 *see example for* `inserter_iterator`
 
@@ -129,7 +129,7 @@ Algorithm
 
 ### for_each ###
 
-Applies function f to each of the elements in the range [first,last).
+Applies function f to each elements in the range [first,last).
 
 Here an example
 
@@ -138,13 +138,13 @@ Here an example
 
 ### min ###
 
-Returns the lesser of a and b. If both are equivalent, a is returned.
+Returns the lesser of a and b. If both are equal, a is returned.
 
 	jstd.min(50, 42) //Return 42
 
 ### max ###
 
-Returns the lesser of a and b. If both are equivalent, a is returned.
+Returns the lesser of a and b. If both are equal, a is returned.
 
 	jstd.min(50, 42) //Return 50
 
@@ -162,16 +162,16 @@ Sets value to the first n elements in the sequence pointed by first.
 
 ### toArray ###
 
-Returns an array fill with all the element present beween [fisrt, last)
+Returns an array fill with all the element present between [first, last)
 
 	jstd.toArray(iterator first, iterator last)
 
 Vector
 ------
 
-### construct ###
+### constructor ###
 
-Default constuctor
+Default constructor
 
 	v = new jstd.vector()
 
@@ -196,7 +196,7 @@ The function automatically checks whether n is within the bounds of valid elemen
 
 ### get ###
 
-Same as at at without boundery checking
+Same as at() without bounds checking
 
 	value vector::get(int n)
 
@@ -244,7 +244,7 @@ Returns whether the vector is empty.
 
 ### resize ###
 
-Resizes the container so that it contains n elements.
+Resizes the container so that it has n elements.
 
 	void vector::resize(int n)
 
@@ -256,7 +256,7 @@ Removes all elements from the vector.
 
 ### swap ###
 
-Exchanges the content of the container by the content of v.
+Exchanges the contents of the container by the contents of v.
 
 	void vector::swap(vector v)
 
@@ -316,7 +316,7 @@ Returns a string representation of the vector
 
 ### toArray ###
 
-Return a javascript array with all the vector content
+Return a JavaScript array with all the vector content
 
        Array vector::toArray()
 
