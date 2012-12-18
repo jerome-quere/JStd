@@ -304,9 +304,9 @@ Removes from the vector a single element pointed by it.
 
 ### eraseRange(iterator first, iterator last) ###
 
-Removes front the vector all the elements present in the interval [first, last)
+Removes from the vector all the elements present in the interval [first, last)
 
-	void vector::eraseRange(iterator it, iterator last)
+	void vector::eraseRange(iterator first, iterator last)
 
 ### toString ###
 
@@ -323,4 +323,146 @@ Return a JavaScript array with all the vector content
 List
 ----
 
-//TODO write list documentation
+### constructor ###
+
+Default constructor
+
+	l = new jstd.list()
+
+### clone ###
+
+Return a clone of the list
+
+       list list::clone()
+
+### copy ###
+
+See Operator Overloading
+
+	void list::copy(list l)
+
+### back ##
+
+Returns the value of the last element in the list.
+
+	list list::back()
+
+### front ###
+
+Returns the value of the first element in the list
+
+	list list::front()
+
+### push_back ###
+
+Adds a new element at the end of the list, after its current last element.
+
+	void list::push_back(value)
+
+### push_front ###
+
+Adds a new element at the beginning of the list, before its current first element.
+
+	void list::push_front(value)
+
+### pop_back ###
+
+Removes the last element in the list
+
+	void list::pop_back()
+
+### pop_front ###
+
+Removes the first element in the list
+
+	void list::pop_front()
+
+### size ###
+
+Returns the number of elements in the list.
+
+	void list::size()
+
+### empty ###
+
+Returns whether the list is empty.
+
+	bool list::empty()
+
+### resize ###
+
+Resizes the container so that it has n elements.
+
+	void list::resize(int n)
+
+### clear ###
+
+Removes all elements from the list.
+
+	void list::clear()
+
+### swap ###
+
+Exchanges the contents of the container by the contents of l.
+
+	void list::swap(list l)
+
+### begin ###
+
+Returns an iterator pointing to the first element in the list.
+
+	iterator list::begin()
+
+### end ###
+
+Returns an iterator referring to the past-the-end element in the list.
+
+	iterator  list::end()
+
+### rbegin ###
+
+Returns a reverse iterator pointing to the last element in the list.
+
+	reverse_iterator list::rbegin()
+
+### rend ###
+
+Returns a reverse iterator pointing to the element right before the first element in the list.
+
+	reverse_iterator list::rend()
+
+### insert ###
+
+The list is extended by inserting new element value before the element pointed by the iterator it.
+
+	iterator list::insert(iterator it, value)
+
+### insertRange ###
+
+The list is extended by inserting new elements present between the first and last iterator before the element pointed by the iterator it.
+
+	iterator list::insertRange(iterator it, iterator first, iterator last)
+
+### erase ###
+
+Removes from the lista single element pointed by it.
+
+	void list::erase(iterator it)
+
+### eraseRange(iterator first, iterator last) ###
+
+Removes from the list all the elements present in the interval [first, last)
+
+	void list::eraseRange(iterator first, iterator last)
+
+### toString ###
+
+Returns a string representation of the list
+
+	String list::toString()
+
+### toArray ###
+
+Return a JavaScript array with all the list content
+
+       Array list::toArray()
