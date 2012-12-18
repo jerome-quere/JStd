@@ -36,6 +36,10 @@ Operator Overloading
 	* obj1(param)           ---> obj1.call(param)
 	* obj3 = obj1 + obj2	---> obj3 = obj1.add(abj2)
 	* obj3 = obj1 - obj2	---> obj3 = obj1.sub(abj2)
+	* *obj1			---> obj1.get()
+	* *obj1 = 42		---> obj1.set(42)
+	* obj1[4]		---> obj1.get(4)
+	* obj1[4] = 2		---> obj1.set(4, 2)
 
 Exception
 ---------
