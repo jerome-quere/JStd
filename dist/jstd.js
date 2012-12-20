@@ -26,6 +26,22 @@
 
   })();
 
+  jstd.not_implemented = (function(_super) {
+
+    __extends(not_implemented, _super);
+
+    function not_implemented(functionName) {
+      this.functionName = functionName;
+    }
+
+    not_implemented.prototype.what = function() {
+      return "Method: " + this.functionName + " not implemented";
+    };
+
+    return not_implemented;
+
+  })(jstd.exception);
+
   jstd.logic_error = (function(_super) {
 
     __extends(logic_error, _super);

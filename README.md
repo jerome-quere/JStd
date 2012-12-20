@@ -49,6 +49,7 @@ JStd declare some base exception type.
 * exception
   * logic_error
      * out_of_range
+  * not_implemented
 
 Iterator
 --------
