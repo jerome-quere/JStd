@@ -826,4 +826,57 @@
 
   })();
 
+  jstd.stack = (function() {
+
+    function stack(container) {
+      if (!(container != null)) {
+        container = jstd.list;
+      }
+      this.container = new [container][0]();
+    }
+
+    stack.prototype.clone = function() {
+      var s;
+      s = new jstd.stack();
+      s.container = this.container.clone();
+      return s;
+    };
+
+    stack.prototype.copy = function(obj) {
+      var s;
+      s = obj.clone();
+      return this.swap(s);
+    };
+
+    stack.prototype.swap = function(obj) {
+      var _ref;
+      return _ref = [obj.container, this.container], this.container = _ref[0], obj.container = _ref[1], _ref;
+    };
+
+    stack.prototype.empty = function() {
+      return this.container.size() === 0;
+    };
+
+    stack.prototype.size = function() {
+      return this.container.size();
+    };
+
+    stack.prototype.top = function() {
+      return this.container.back();
+    };
+
+    stack.prototype.push = function(value) {
+      return this.container.push_back(value);
+    };
+
+    stack.prototype.pop = function() {
+      return this.container.pop_back();
+    };
+
+    stack.container;
+
+    return stack;
+
+  })();
+
 }).call(this);

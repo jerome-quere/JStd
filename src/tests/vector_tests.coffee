@@ -54,12 +54,32 @@ describe 'vector', () ->
 				v.push_back(i)
 				assert.equal(v.front(), 0)
 
+	describe '#push_back()', () ->
+		it 'should add an element after the current last element', () ->
+			v = new jstd.vector()
+			for i in [0..10]
+				v.push_back(i)
+				assert.equal(v.back(), i)
+
+	describe '#pop_back()', () ->
+		it 'should remove the last element', () ->
+			v = new jstd.vector()
+			v.push_back(-1)
+			for i in [0..10]
+				v.push_back(i)
+				assert.equal(v.back(), i)
+				v.pop_back(i)
+				assert.equal(v.back(), -1)
+
 	describe '#size()', () ->
 		it 'should returns the number of elements ', () ->
 			v = new jstd.vector()
 			for i in [0..10]
 				v.push_back(i)
 				assert.equal(v.size(), i + 1)
+			for i in [10..0]
+				v.pop_back(i)
+				assert.equal(v.size(), i)
 
 	describe '#empty()', () ->
 		it 'should checks whether the container is empty', () ->
@@ -118,6 +138,7 @@ describe 'vector', () ->
 				v.push_back(i)
 			v2 = v.clone()
 			assert.equal(v2.size(), 10);
+			assert.equal(jstd.accumulate(v.begin(), v.end(), 0), jstd.accumulate(v2.begin(), v.end(), 0)) 
 			v.push_back(11)
 			assert.equal(v2.size(), 10);
 
