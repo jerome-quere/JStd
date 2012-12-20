@@ -25,7 +25,8 @@ SRC_FILES	=	$(SRC_FOLDER)/_jstd.coffee		\
 			$(SRC_FOLDER)/Algorithm.coffee		\
 			$(SRC_FOLDER)/Vector.coffee		\
 			$(SRC_FOLDER)/List.coffee		\
-			$(SRC_FOLDER)/Stack.coffee
+			$(SRC_FOLDER)/Stack.coffee		\
+			$(SRC_FOLDER)/Queue.coffee
 
 TESTS_FOLDER	=	src/tests
 TESTS_FILES	=	$(TESTS_FOLDER)/algorithm_tests.coffee	\
@@ -33,7 +34,8 @@ TESTS_FILES	=	$(TESTS_FOLDER)/algorithm_tests.coffee	\
 			$(TESTS_FOLDER)/iterator_tests.coffee	\
 			$(TESTS_FOLDER)/vector_tests.coffee	\
 			$(TESTS_FOLDER)/list_tests.coffee	\
-			$(TESTS_FOLDER)/stack_tests.coffee
+			$(TESTS_FOLDER)/stack_tests.coffee	\
+			$(TESTS_FOLDER)/queue_tests.coffee
 
 all:
 	@coffee -c -j $(NAME) $(SRC_FILES)

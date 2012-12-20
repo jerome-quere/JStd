@@ -19,100 +19,100 @@
 
 class jstd.vector
 
-        constructor: () -> @array = []
+	constructor: () -> @array = []
 
-        clone: () ->
-                v = new jstd.vector()
-                v.insertRange v.begin(), @begin(), @end()
-                return (v)
-        copy: (obj) -> @swap(obj.clone())
-        at: (idx) ->
-                if (idx < 0 || idx >= @size())
-                        throw new jstd.out_of_range()
-                @get(idx)
+	clone: () ->
+		v = new jstd.vector()
+		v.insertRange v.begin(), @begin(), @end()
+		return (v)
+	copy: (obj) -> @swap(obj.clone())
+	at: (idx) ->
+		if (idx < 0 || idx >= @size())
+			throw new jstd.out_of_range()
+		@get(idx)
 
-        get:   (idx) -> @array[idx]
-        set:   (idx, value) -> @array[idx] = value
-        back:  () -> @array[@size() - 1]
-        front: () -> @array[0]
-        push_back:  (value) -> @array.push(value)
-        pop_back:  (value) -> @array.pop()
-        size:  () -> @array.length
-        empty: () -> @size() == 0
-        resize: (size) ->
-                if (size < 0)
-                        size = 0;
-                if size < @size()
-                        @eraseRange(jstd.advance(@begin(), size), @end())
-                while @size() < size
-                        @array.push(null)
-        clear: () ->
-                @resize(0);
+	get:   (idx) -> @array[idx]
+	set:   (idx, value) -> @array[idx] = value
+	back:  () -> @array[@size() - 1]
+	front: () -> @array[0]
+	push_back:  (value) -> @array.push(value)
+	pop_back:  (value) -> @array.pop()
+	size:  () -> @array.length
+	empty: () -> @size() == 0
+	resize: (size) ->
+		if (size < 0)
+			size = 0;
+		if size < @size()
+			@eraseRange(jstd.advance(@begin(), size), @end())
+		while @size() < size
+			@array.push(null)
+	clear: () ->
+		@resize(0);
 
-        swap: (obj) ->
-                [@array, obj.array] = [obj.array, @array]
-                [@idx, obj.idx] = [obj.idx, @idx]
+	swap: (obj) ->
+		[@array, obj.array] = [obj.array, @array]
+		[@idx, obj.idx] = [obj.idx, @idx]
 
-        begin: () -> new @iterator(this, 0);
-        end:   () -> new @iterator(this, @size());
-        rbegin: () -> new jstd.reverse_iterator(@end());
-        rend:   () -> new jstd.reverse_iterator(@begin());
+	begin: () -> new @iterator(this, 0);
+	end:   () -> new @iterator(this, @size());
+	rbegin: () -> new jstd.reverse_iterator(@end());
+	rend:	() -> new jstd.reverse_iterator(@begin());
 
-        insert: (it, value) ->
-                @array.splice(it.value(), 0, value)
-                return (it.add(1));
+	insert: (it, value) ->
+		@array.splice(it.value(), 0, value)
+		return (it.add(1));
 
-        insertRange: (it, first, last) ->
-                jstd.copy(first, last, jstd.inserter(this, it))
+	insertRange: (it, first, last) ->
+		jstd.copy(first, last, jstd.inserter(this, it))
 
-        erase: (it) ->
-                @array.splice(it.value(), 1);
-                return (it.next())
+	erase: (it) ->
+		@array.splice(it.value(), 1);
+		return (it.next())
 
-        eraseRange: (first, last) ->
-                if last.value() < first.value()
-                        [first, last] = [last.base(), first.base()];
-                @array.splice(first.value(), Math.abs(first.idx - last.idx))
+	eraseRange: (first, last) ->
+		if last.value() < first.value()
+			[first, last] = [last.base(), first.base()];
+		@array.splice(first.value(), Math.abs(first.idx - last.idx))
 
-        toString: () ->
-                return "[#{@array.join(',')}]";
+	toString: () ->
+		return "[#{@array.join(',')}]";
 
-        toArray: () ->
-                return (@array);
+	toArray: () ->
+		return (@array);
 
-        class vector::iterator extends jstd.iterator
-                constructor: (@vector, @idx) ->
-                        super jstd.iterator.TYPE_RANDOM;
+	class vector::iterator extends jstd.iterator
+		constructor: (@vector, @idx) ->
+			super jstd.iterator.TYPE_RANDOM;
 
-                clone: () -> new iterator(@vector, @idx)
+		clone: () -> new iterator(@vector, @idx)
 
-                copy: (obj) ->
-                        i = obj.clone();
-                        @swap(i)
+		copy: (obj) ->
+			i = obj.clone();
+			@swap(i)
 
-                swap: (obj) ->
-                        [@vector, obj.vector] = [obj.vector, @vector]
-                        [@idx, obj.idx] = [obj.idx, @idx]
+		swap: (obj) ->
+			[@vector, obj.vector] = [obj.vector, @vector]
+			[@idx, obj.idx] = [obj.idx, @idx]
 
-                get:  () ->
-                        @vector.get(@idx)
-                set:  (value) ->
-                        @vector.set(@idx, value);
-                value: () -> @idx;
-                next: () ->
-                        @idx++;
-                        return this
-                prev: () ->
-                        @idx--;
-                        return this
-                eq:   (it) -> @idx == it.idx
-                lt:   (it) -> @idx < it.idx
-                neq:  (it) -> !@eq(it)
-                lte:  (it) -> @lt(it) || @eq(it)
-                gt:   (it) -> !@lte(it)
-                gte:  (it) -> @gt(it) || @eq(it)
-                add:  (v)  -> new iterator(@vector, @idx + v);
-                sub:  (v)  -> new iterator(@vector, @idx - v);;
+		get:  () ->
+			@vector.get(@idx)
+		set:  (value) ->
+			@vector.set(@idx, value);
+		value: () -> @idx;
+		next: () ->
+			@idx++;
+			return this
+		prev: () ->
+			@idx--;
+			return this
+		eq:   (it) -> @idx == it.idx
+		lt:   (it) -> @idx < it.idx
+		neq:  (it) -> !@eq(it)
+		lte:  (it) -> @lt(it) || @eq(it)
+		gt:   (it) -> !@lte(it)
+		gte:  (it) -> @gt(it) || @eq(it)
+		add:  (v)  -> new iterator(@vector, @idx + v);
+		sub:  (v)  -> new iterator(@vector, @idx - v);;
 
 
 module.exports = jstd;

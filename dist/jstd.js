@@ -316,6 +316,13 @@
     }
   };
 
+  jstd.equal = function(obj1, obj2) {
+    if (typeof obj1 === "number" || typeof obj1 === "bool" || typeof obj1 === "string" || obj1 instanceof Array) {
+      return obj1 === obj2;
+    }
+    return obj1.eq(obj2);
+  };
+
   jstd.copy = function(first, last, it) {
     first = first.clone();
     it = it.clone();
@@ -338,6 +345,31 @@
       _results.push(i++);
     }
     return _results;
+  };
+
+  jstd.find = function(first, last, value) {
+    first = first.clone();
+    while (first.neq(last)) {
+      if (jstd.equal(first.get(), value)) {
+        return first;
+      }
+      first.next();
+    }
+    return last;
+  };
+
+  jstd.remove_if = function(first, last, pred) {
+    var result;
+    first = first.clone();
+    result = first.clone();
+    while (first.neq(last)) {
+      if (!pred(first.get())) {
+        result.set(first.get());
+        result.next();
+      }
+      first.next();
+    }
+    return result;
   };
 
   jstd.toArray = function(first, last) {
@@ -876,6 +908,63 @@
     stack.container;
 
     return stack;
+
+  })();
+
+  jstd.queue = (function() {
+
+    function queue(container) {
+      if (!(container != null)) {
+        container = jstd.list;
+      }
+      this.container = new [container][0]();
+    }
+
+    queue.prototype.clone = function() {
+      var q;
+      q = new jstd.queue();
+      q.container = this.container.clone();
+      return q;
+    };
+
+    queue.prototype.copy = function(obj) {
+      var q;
+      q = obj.clone();
+      return this.swap(q);
+    };
+
+    queue.prototype.swap = function(obj) {
+      var _ref;
+      return _ref = [obj.container, this.container], this.container = _ref[0], obj.container = _ref[1], _ref;
+    };
+
+    queue.prototype.empty = function() {
+      return this.container.size() === 0;
+    };
+
+    queue.prototype.size = function() {
+      return this.container.size();
+    };
+
+    queue.prototype.front = function() {
+      return this.container.front();
+    };
+
+    queue.prototype.back = function() {
+      return this.container.back();
+    };
+
+    queue.prototype.push = function(value) {
+      return this.container.push_back(value);
+    };
+
+    queue.prototype.pop = function() {
+      return this.container.pop_front();
+    };
+
+    queue.container;
+
+    return queue;
 
   })();
 

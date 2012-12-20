@@ -17,17 +17,41 @@
 # along with Jstd.If not, see <http://www.gnu.org/licenses/>.
 ##
 
-class jstd.exception
-	constructor: () ->
-		@message = @what()
-	what: () -> "exception"
+class jstd.queue
 
-class jstd.not_implemented extends jstd.exception
-	constructor: (@functionName) ->
-	what: () -> "Method: #{@functionName} not implemented";
+	constructor: (container) ->
+		if (!container?)
+			container = jstd.list
+		@container = new [container][0]()
 
-class jstd.logic_error extends jstd.exception
-	what: () -> "logic_error"
+	clone: () ->
+		q = new jstd.queue()
+		q.container = @container.clone()
+		return (q)
 
-class jstd.out_of_range extends jstd.logic_error
-	what: ()-> "out_of_range"
+	copy: (obj) ->
+		q = obj.clone()
+		@swap(q)
+
+	swap: (obj) ->
+		[@container, obj.container] = [obj.container, @container]
+
+	empty: () ->
+		@container.size() == 0
+
+	size:  () ->
+		@container.size()
+
+	front: () ->
+		@container.front()
+
+	back: () ->
+		@container.back()
+
+	push:  (value) ->
+		@container.push_back(value)
+
+	pop:   () ->
+		@container.pop_front()
+
+	@container

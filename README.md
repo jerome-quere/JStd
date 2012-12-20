@@ -152,6 +152,12 @@ Returns the lesser of a and b. If both are equal, a is returned.
 
 	jstd.min(50, 42) //Return 50
 
+### equal ###
+
+Returns true if a and b are equal
+
+	bool jstd.equal(a, b)
+
 ### copy ###
 
 Copies the elements in the range [first,last) into a range beginning at result.
@@ -164,11 +170,42 @@ Sets value to the first n elements in the sequence pointed by first.
 
 	jstd.fill_n(output_iterator first, n, v)
 
+### find ###
+
+Returns an iterator to the first element in the range [first,last) that compares equal to value, or last if not found.
+
+	iterator jstd.find(input_iterator first, input_iterator last, value)
+
+### remove_if ###
+
+Applies pred to the elements in the range [first,last), and removes those for which it does not return false from the resulting range.
+The resulting range consists of the elements between first and the iterator returned by the function, which points to the new end of the range.
+The relative order of the elements not removed is preserved, while the elements past the new end of range are still valid, although with unspecified values.
+
+	iterator jstd.remove_if(input_iterator first, input_iterator last, predicate pred)
+
 ### toArray ###
 
 Returns an array fill with all the element present between [first, last)
 
 	jstd.toArray(iterator first, iterator last)
+
+Utility
+-------
+
+### pair ###
+
+This class couples together a pair of values. The individual values can be accessed through the members first and second.
+
+	p = new jstd.pair(42, 24)
+	p.first //42
+	p.sencond //24
+
+### make_pair ###
+
+Constructs a pair object with its first element set to x and its second element set to y.
+
+	p = jstd.make_pair(42, 24) //Same as new jstd.pair(42, 24)
 
 Vector
 ------
@@ -385,7 +422,7 @@ Removes the first element in the list
 
 Returns the number of elements in the list.
 
-	void list::size()
+	int list::size()
 
 ### empty ###
 
@@ -470,3 +507,123 @@ Returns a string representation of the list
 Return a JavaScript array with all the list content
 
        Array list::toArray()
+
+Stack
+-----
+
+### constructor ###
+
+Default constructor
+
+	s = new jstd.stack()
+
+### clone ###
+
+Return a clone of the stack
+
+       stack stack::clone()
+
+### copy ###
+
+See Operator Overloading
+
+	void stack::copy(stack s)
+
+### top ##
+
+Returns the value of the stack top element.
+
+	T stack::top()
+
+### push ###
+
+Adds a new element on the top of the stack
+
+	void stack::push(T value)
+
+### pop ###
+
+Removes the element on the top of the stack
+
+	void stack::pop()
+
+### size ###
+
+Returns the number of elements in the stack.
+
+	int stack::size()
+
+### empty ###
+
+Returns whether the list is empty.
+
+	bool list::empty()
+
+### swap ###
+
+Exchanges the contents of the container by the contents of s.
+
+	void stack::swap(stack s)
+
+Queue
+-----
+
+### constructor ###
+
+Default constructor
+
+	q = new jstd.queue()
+
+### clone ###
+
+Return a clone of the queue
+
+       queue queue::clone()
+
+### copy ###
+
+See Operator Overloading
+
+	void queue::copy(queue q)
+
+### front ##
+
+Returns the value of the queue front element.
+
+	T queue::front()
+
+### back ##
+
+Returns the value of the queue back element.
+
+	T queue::back()
+
+### push ###
+
+Adds a new element on the end of the queue
+
+	void queue::push(T value)
+
+### pop ###
+
+Removes the element on the front of the queue
+
+	void queue::pop()
+
+### size ###
+
+Returns the number of elements in the queue.
+
+	int queue::size()
+
+### empty ###
+
+Returns whether the queue is empty.
+
+	bool queue::empty()
+
+### swap ###
+
+Exchanges the contents of the container by the contents of q.
+
+	void queue::swap(queue s)

@@ -17,17 +17,8 @@
 # along with Jstd.If not, see <http://www.gnu.org/licenses/>.
 ##
 
-class jstd.exception
-	constructor: () ->
-		@message = @what()
-	what: () -> "exception"
+jstd.make_pair = (first, second) ->
+	return new jstd.pair(first, second)
 
-class jstd.not_implemented extends jstd.exception
-	constructor: (@functionName) ->
-	what: () -> "Method: #{@functionName} not implemented";
-
-class jstd.logic_error extends jstd.exception
-	what: () -> "logic_error"
-
-class jstd.out_of_range extends jstd.logic_error
-	what: ()-> "out_of_range"
+class jstd.pair
+	constructor: (@first, @second) ->
