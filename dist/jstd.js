@@ -332,11 +332,18 @@
     }
   };
 
-  jstd.equal = function(obj1, obj2) {
+  jstd.eq = function(obj1, obj2) {
     if (typeof obj1 === "number" || typeof obj1 === "bool" || typeof obj1 === "string" || obj1 instanceof Array) {
       return obj1 === obj2;
     }
     return obj1.eq(obj2);
+  };
+
+  jstd.lt = function(obj1, obj2) {
+    if (typeof obj1 === "number" || typeof obj1 === "bool" || typeof obj1 === "string" || obj1 instanceof Array) {
+      return obj1 < obj2;
+    }
+    return obj1.lt(obj2);
   };
 
   jstd.copy = function(first, last, it) {
@@ -366,12 +373,23 @@
   jstd.find = function(first, last, value) {
     first = first.clone();
     while (first.neq(last)) {
-      if (jstd.equal(first.get(), value)) {
+      if (jstd.eq(first.get(), value)) {
         return first;
       }
       first.next();
     }
     return last;
+  };
+
+  jstd.find_if = function(first, last, pred) {
+    first = first.clone();
+    while (first.neq(last)) {
+      if (pred(first.get())) {
+        return first;
+      }
+      first.next();
+    }
+    return first;
   };
 
   jstd.remove_if = function(first, last, pred) {
@@ -396,6 +414,21 @@
     });
     return array;
   };
+
+  jstd.make_pair = function(first, second) {
+    return new jstd.pair(first, second);
+  };
+
+  jstd.pair = (function() {
+
+    function pair(first, second) {
+      this.first = first;
+      this.second = second;
+    }
+
+    return pair;
+
+  })();
 
   jstd.vector = (function() {
 
@@ -756,9 +789,9 @@
     list.prototype.erase = function(it) {
       var _ref;
       if (it.eq(this.end())) {
-        this.pop_back(value);
+        this.pop_back();
       } else if (it.eq(this.begin())) {
-        this.pop_front(value);
+        this.pop_front();
       } else {
         _ref = [it.node.next, it.node.prev], it.node.prev.next = _ref[0], it.node.next.prev = _ref[1];
         this.size_--;
@@ -981,6 +1014,161 @@
     queue.container;
 
     return queue;
+
+  })();
+
+  jstd.map = (function() {
+
+    function map() {
+      this.list = new jstd.list();
+    }
+
+    map.prototype.clone = function() {
+      var m;
+      m = new jstd.map();
+      m.list = this.list.clone();
+      return m;
+    };
+
+    map.prototype.swap = function(obj) {
+      var _ref;
+      return _ref = [obj.list, this.list], this.list = _ref[0], obj.list = _ref[1], _ref;
+    };
+
+    map.prototype.find = function(key) {
+      return jstd.find_if(this.begin(), this.end(), function(pair) {
+        return jstd.eq(pair.first, key);
+      });
+    };
+
+    map.prototype.size = function() {
+      return this.list.size();
+    };
+
+    map.prototype.empty = function() {
+      return this.list.empty();
+    };
+
+    map.prototype.clear = function() {
+      return this.list.clear();
+    };
+
+    map.prototype.set = function(key, value) {
+      var it;
+      it = this.find(key);
+      if (it.neq(this.end())) {
+        return it.get().second = value;
+      } else {
+        return this.insert(jstd.make_pair(key, value));
+      }
+    };
+
+    map.prototype.get = function(key) {
+      return (this.find(key).get().second);
+    };
+
+    map.prototype.begin = function() {
+      return new this.iterator(this.list.begin());
+    };
+
+    map.prototype.end = function() {
+      return new this.iterator(this.list.end());
+    };
+
+    map.prototype.rbegin = function() {
+      return new jstd.reverse_iterator(this.end());
+    };
+
+    map.prototype.rend = function() {
+      return new jstd.reverse_iterator(this.begin());
+    };
+
+    map.prototype.insert = function(pair) {
+      var it, lend, lit;
+      it = this.find(pair);
+      if (it.eq(this.end())) {
+        lit = this.list.begin();
+        lend = this.list.end();
+        while (lit.neq(lend)) {
+          if (jstd.lt(pair.first, lit.get().first)) {
+            return this.list.insert(lit, pair);
+          }
+          lit.next();
+        }
+        return this.list.push_back(pair);
+      }
+      it.set(pair);
+      return it;
+    };
+
+    map.prototype.insertRange = function(first, last) {
+      var _this = this;
+      return jstd.for_each(first, last, function(pair) {
+        return _this.insert(pair);
+      });
+    };
+
+    map.prototype.erase = function(key) {
+      var it;
+      it = this.find(key);
+      if (it.neq(this.end())) {
+        return this.list.erase(it.listIt);
+      }
+    };
+
+    map.prototype.iterator = (function(_super) {
+
+      __extends(iterator, _super);
+
+      function iterator(listIt) {
+        this.listIt = listIt;
+        iterator.__super__.constructor.call(this, jstd.iterator.TYPE_BIDIRECTIONAL);
+      }
+
+      iterator.prototype.clone = function() {
+        return new iterator(this.listIt.clone());
+      };
+
+      iterator.prototype.copy = function(obj) {
+        var i;
+        i = obj.clone();
+        return this.swap(i);
+      };
+
+      iterator.prototype.swap = function(obj) {
+        var _ref;
+        return _ref = [obj.listIt, this.listIt], this.listIt = _ref[0], obj.listIt = _ref[1], _ref;
+      };
+
+      iterator.prototype.eq = function(obj) {
+        return this.listIt.eq(obj.listIt);
+      };
+
+      iterator.prototype.neq = function(obj) {
+        return !this.eq(obj);
+      };
+
+      iterator.prototype.next = function() {
+        return this.listIt.next();
+      };
+
+      iterator.prototype.prev = function() {
+        return this.listIt.prev();
+      };
+
+      iterator.prototype.get = function() {
+        return this.listIt.get();
+      };
+
+      iterator.prototype.set = function(pair) {
+        return this.listIt.set(pair);
+      };
+
+      return iterator;
+
+    })(jstd.iterator);
+
+    return map;
 
   })();
 

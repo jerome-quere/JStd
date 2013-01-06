@@ -33,10 +33,15 @@ jstd.max = (obj1, obj2) ->
 		return if (obj1<obj2) then obj2 else obj1;
 	if (obj1.lt(obj2)) then obj2 else obj1;
 
-jstd.equal = (obj1, obj2) ->
+jstd.eq = (obj1, obj2) ->
 	if (typeof obj1 == "number" || typeof obj1 == "bool" || typeof obj1 == "string" || obj1 instanceof Array)
 		return obj1 == obj2
 	return obj1.eq obj2
+
+jstd.lt = (obj1, obj2) ->
+	if (typeof obj1 == "number" || typeof obj1 == "bool" || typeof obj1 == "string" || obj1 instanceof Array)
+		return obj1 < obj2
+	return obj1.lt obj2
 
 jstd.copy = (first, last, it) ->
 	first = first.clone()
@@ -58,10 +63,18 @@ jstd.fill_n = (first, n, v) ->
 jstd.find = (first, last, value) ->
 	first = first.clone()
 	while (first.neq last)
-		if (jstd.equal(first.get(), value))
+		if (jstd.eq(first.get(), value))
 			return (first)
 		first.next()
 	return last
+
+jstd.find_if = (first, last, pred) ->
+	first = first.clone()
+	while (first.neq last)
+		if (pred(first.get()))
+			return (first)
+		first.next()
+	return first
 
 jstd.remove_if = (first, last, pred) ->
 	first = first.clone()

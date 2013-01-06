@@ -99,8 +99,8 @@ class jstd.list
 		jstd.copy(first, last, jstd.inserter(this, it))
 
 	erase: (it) ->
-		if (it.eq @end()) then @pop_back(value)
-		else if (it.eq @begin()) then @pop_front(value)
+		if (it.eq @end()) then @pop_back()
+		else if (it.eq @begin()) then @pop_front()
 		else
 			[it.node.prev.next, it.node.next.prev] = [it.node.next, it.node.prev]
 			@size_--

@@ -70,6 +70,17 @@ describe 'algorithm', () ->
 			it = jstd.find(v.begin(), v.end(), -1)
 			assert(v.end().eq it)
 
+	describe '#find_if', () ->
+		it 'Returns an iterator to the first element in the range [first,last) for which applying pred to it, is true', () ->
+			v = new jstd.vector();
+			for i in [0..10]
+				v.push_back(i);
+			it = jstd.find_if(v.begin(), v.end(), (v) -> v == 5)
+			assert.equal(it.get(), 5)
+			it = jstd.find_if(v.begin(), v.end(), (v) -> v == -1)
+			assert(v.end().eq it)
+
+
 	describe '#remove_if', () ->
 		it  'Applies pred to the elements in the range, and removes those for which it does not return false from the resulting range.',  () ->
 			v = new jstd.vector();
