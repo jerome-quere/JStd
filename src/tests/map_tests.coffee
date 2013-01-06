@@ -132,3 +132,24 @@ describe 'map', () ->
 			assert.equal(v.get(1), 2)
 			v.eraseRange(v.begin(), v.end().sub(1));
 			assert.equal(jstd.accumulate(v.begin(), v.end()), 10)
+
+	describe '#toString', () ->
+		it 'should return a string representation of the map', () ->
+			m = new jstd.map()
+			for i in [0..10]
+				m.set(i, i + 100)
+
+			str = m.toString();
+			assert.equal("{'0':'100', '1':'101', '2':'102', '3':'103', '4':'104', '5':'105', '6':'106', '7':'107', '8':'108', '9':'109', '10':'110'}", str)
+
+	describe '#toArray', () ->
+		it 'should return an aray with all the map elements', () ->
+			m = new jstd.map()
+			ref = []
+			for i in [0..10]
+				pair = jstd.make_pair(i, i+100)
+				m.insert(pair)
+				ref.push(pair)
+
+			tab = m.toArray();
+			assert.equal(tab.toString(), ref.toString())

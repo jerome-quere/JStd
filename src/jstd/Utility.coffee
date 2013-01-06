@@ -22,3 +22,5 @@ jstd.make_pair = (first, second) ->
 
 class jstd.pair
 	constructor: (@first, @second) ->
+	toString: () ->
+		return "'#{@first}':'#{@second}'";

@@ -125,7 +125,7 @@ class jstd.list
 			str = "#{str}#{i}"
 		return "{#{str}}"
 
-	toArray: () -> jstd.toArray(@begin(), @last())
+	toArray: () -> jstd.toArray(@begin(), @end())
 
 
 	class list::node

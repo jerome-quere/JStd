@@ -426,6 +426,10 @@
       this.second = second;
     }
 
+    pair.prototype.toString = function() {
+      return "'" + this.first + "':'" + this.second + "'";
+    };
+
     return pair;
 
   })();
@@ -833,7 +837,7 @@
     };
 
     list.prototype.toArray = function() {
-      return jstd.toArray(this.begin(), this.last());
+      return jstd.toArray(this.begin(), this.end());
     };
 
     list.prototype.node = (function() {
