@@ -1064,7 +1064,12 @@
     };
 
     map.prototype.get = function(key) {
-      return (this.find(key).get().second);
+      var it;
+      it = this.find(key);
+      if (it.eq(this.end())) {
+        it = this.insert(jstd.make_pair(key, null));
+      }
+      return it.get().second;
     };
 
     map.prototype.begin = function() {
@@ -1091,20 +1096,20 @@
         lend = this.list.end();
         while (lit.neq(lend)) {
           if (jstd.lt(pair.first, lit.get().first)) {
-            return this.list.insert(lit, pair);
+            return this.list.insert(lit, pair.clone());
           }
           lit.next();
         }
         return this.list.push_back(pair);
       }
-      it.set(pair);
+      it.set(pair.clone());
       return it;
     };
 
     map.prototype.insertRange = function(first, last) {
       var _this = this;
       return jstd.for_each(first, last, function(pair) {
-        return _this.insert(pair);
+        return _this.insert(pair.clone());
       });
     };
 
@@ -1114,6 +1119,14 @@
       if (it.neq(this.end())) {
         return this.list.erase(it.listIt);
       }
+    };
+
+    map.prototype.toString = function() {
+      return this.list.toString();
+    };
+
+    map.prototype.toArray = function() {
+      return this.list.toArray();
     };
 
     map.prototype.iterator = (function(_super) {

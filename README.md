@@ -177,6 +177,12 @@ Returns an iterator to the first element in the range [first,last) that compares
 
 	iterator jstd.find(input_iterator first, input_iterator last, value)
 
+### find_if ###
+
+Returns an iterator to the first element in the range [first,last) for which applying pred to it, is true.
+
+	iterator jstd.find_if(input_iterator first, input_iterator last, Pred pred)
+
 ### remove_if ###
 
 Applies pred to the elements in the range [first,last), and removes those for which it does not return false from the resulting range.
@@ -276,7 +282,7 @@ Removes the last element in the vector
 
 Returns the number of elements in the vector.
 
-	void vector::size()
+	int vector::size()
 
 ### empty ###
 
@@ -628,3 +634,115 @@ Returns whether the queue is empty.
 Exchanges the contents of the container by the contents of q.
 
 	void queue::swap(queue s)
+
+Map
+---
+
+### constructor ###
+
+Default constructor
+
+	m = new jstd.map()
+
+### clone ###
+
+Return a copy of the map
+
+       map map::clone()
+
+### copy ###
+
+See Operator Overloading
+
+	void map::copy(map v)
+
+### get ###
+
+If x matches the key of an element in the container, the function returns a reference to its mapped value.
+If x does not match the key of any element in the container, the function inserts a new element.
+
+	value map::get(K key)
+
+### set ###
+
+Set the value of the element associated with the specified key.
+
+	void map::set(K key, T value)
+
+### size ###
+
+Returns the number of elements in the map.
+
+	int map::size()
+
+### empty ###
+
+Returns whether the map is empty.
+
+	bool map::empty()
+
+### clear ###
+
+Removes all elements from the map.
+
+	void map::clear()
+
+### swap ###
+
+Exchanges the contents of the container by the contents of m.
+
+	void map::swap(Map m)
+
+### begin ###
+
+Returns an iterator pointing to the element with the lowest key in the map.
+
+	iterator map::begin()
+
+### end ###
+
+Returns an iterator referring to the past-the-end element in the map container.
+
+	iterator  map::end()
+
+### rbegin ###
+
+Returns a reverse iterator pointing to the element with the higgst key in the map.
+
+	reverse_iterator map::rbegin()
+
+### rend ###
+
+Returns a reverse iterator pointing to the element right before the element with the smaller key in the map.
+
+	reverse_iterator map::rend()
+
+### insert ###
+
+Insert a  new element in the map. The pair.first is used as key when the pair.second is used as value.
+
+	iterator map::insert(pair pair)
+
+### insertRange ###
+
+Insert new elements present between the first and last iterator. The iterator must iterator over pair object.
+
+	iterator map::insertRange(iterator first, iterator last)
+
+### erase ###
+
+Removes from the map the element asociated with the key.
+
+	void map::erase(K key)
+
+### toString ###
+
+Returns a string representation of the map
+
+	String map::toString()
+
+### toArray ###
+
+Return a JavaScript array with all the pair present in the map.
+
+       Array map::toArray()

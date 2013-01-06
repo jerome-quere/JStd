@@ -50,7 +50,10 @@ class jstd.map
 			@insert(jstd.make_pair(key, value))
 
 	get: (key) ->
-		return(@find(key).get().second);
+		it = @find(key)
+		if (it.eq @end())
+			it = @insert(jstd.make_pair(key, null))
+		return it.get().second;
 
 	begin: () ->
 		new @iterator(@list.begin());
@@ -71,19 +74,25 @@ class jstd.map
 			lend = @list.end()
 			while (lit.neq lend)
 				if (jstd.lt(pair.first, lit.get().first))
-					return @list.insert(lit, pair);
+					return @list.insert(lit, pair.clone());
 				lit.next()
 			return @list.push_back(pair)
-		it.set(pair);
+		it.set(pair.clone());
 		return it;
 
 	insertRange: (first, last) ->
-		jstd.for_each(first, last, (pair) => @insert(pair))
+		jstd.for_each(first, last, (pair) => @insert(pair.clone()))
 
 	erase: (key) ->
 		it = @find(key);
 		if (it.neq @end())
 			@list.erase(it.listIt);
+
+	toString: () ->
+		return (@list.toString())
+
+	toArray: () ->
+		return @list.toArray()
 
 	class map::iterator extends jstd.iterator
 
