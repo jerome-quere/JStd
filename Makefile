@@ -51,4 +51,4 @@ watch:
 	@coffee -w -c -j $(NAME) $(SRC_FILES)
 
 test:
-	@mocha --compilers 'coffee:coffee-script' $(TESTS_FILES)
+	@mocha --compilers 'coffee:coffee-script/register' $(TESTS_FILES)
